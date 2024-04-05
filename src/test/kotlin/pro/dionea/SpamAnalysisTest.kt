@@ -76,10 +76,42 @@ class SpamAnalysisTest {
         assertThat(SpamAnalysis().isSpam(text)).isTrue()
     }
 
+    @Test
     fun isSpam8() {
         val text = "Добрый день. Извиняюсь что не по теме, может кто то трейдингом занимается? " +
                 "Хочу поделиться полезным материалом по трейдингу) " +
                 "Вдруг кому то будет интересно, пишите в личку)"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam9() {
+        val text = "Ищу людей, возьму 2-3 человека 18+ \n" +
+                "Удаленная деятельность \n" +
+                "От 250\$  в  день\n" +
+                "Кому интересно: Пишите + в лс"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam10() {
+        val text = "Готов обучить aрбитражу \n" +
+                "Меж-биржeвой и внyтри-биpжевой apбитраж \n" +
+                "Опeрации прoизводите на своём личном aккаунте \n" +
+                "Не беру дaнные и срeдства под свoё упрaвление \n" +
+                "Пpибыль получаете также на свой кoшелёк\n" +
+                "Беру только прoцент от вaшей чистой пpибыли, oплата прoцентов любым удобным способом\n" +
+                "По всем вопросам жду в личных сообщениях"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam11() {
+        val text = "\uD83D\uDCF2 Рaбoтa - oт 5 тыс. р ежедневнo. Рaбoтa пo интернет, " +
+                "без нaрушения зaкoнa, oпыт не требуется, без влoжений. " +
+                "Нужны люди, чтoбы делaть лёгкие зaдaния в бoте в TG\n" +
+                "\n" +
+                "Пoлучить инфoрмaцию: нaйдите в пoиске rabota_382"
         assertThat(SpamAnalysis().isSpam(text)).isTrue()
     }
 }

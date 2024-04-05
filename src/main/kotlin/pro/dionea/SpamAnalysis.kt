@@ -4,14 +4,16 @@ import org.springframework.stereotype.Service
 
 @Service
 class SpamAnalysis {
-    val jobSynonym = setOf("работа", "заработок",
+    val jobSynonym = setOf("работа", "рaбoтa", "заработок",
         "зaрaбoтoк", "поднимать", "заработка", "зароботка",
         "заработать", "работу", "доход",
-        "трейтинг", "трейдингу")
+        "трейдинг", "трейдингу", "трейдингом",
+        "деятельность", "деятельностью",
+        "aрбитражу", "aрбитраж")
 
     val messageSynonym = setOf(
         "пиши", "напиши", "напишите", "пишите", "лс",
-        "детали", "детaли"
+        "детали", "детaли", "сообщениях", "пoиске"
     )
 
     fun isSpam(text: String): Boolean {
