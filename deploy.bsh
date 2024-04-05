@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if test -f "dionea.pid"; then
+    kill -9 $(cat dionea.pid)
+fi
+
+rm -rf nohup.out
+
+export JAVA_HOME=/root/jdk-18.0.1.1
+
+export M2_HOME=/root/apache-maven-3.8.6
+
+export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+
+git fetch
+
+git rebase
+
+mvn install
+
+nohup java "-Dspring.config.location=file:./deonea.properties" -jar target/dionea-0.0.1.jar > /dev/null 2>&1&
