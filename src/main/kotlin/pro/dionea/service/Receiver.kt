@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 class Receiver(val name: String, val token: String, val analysis: SpamAnalysis) : TelegramLongPollingBot() {
 
     override fun onUpdateReceived(update: Update) {
-        if (update.hasMessage()) {
+        if (update.hasMessage() && update.message.text != null) {
             val message = update.message
             if (analysis.isSpam(message.text)) {
                 val send = SendMessage(
