@@ -1,10 +1,9 @@
 #!/bin/bash
 
+echo "kill process"
 if test -f "dionea.pid"; then
     kill -9 $(cat dionea.pid)
 fi
-
-rm -rf nohup.out
 
 export JAVA_HOME=/root/jdk-18.0.1.1
 
@@ -18,4 +17,5 @@ git rebase
 
 mvn install
 
+echo "run project"
 nohup java "-Dspring.config.location=file:./dionea.properties" -jar target/dionea-0.0.1.jar > /dev/null 2>&1&
