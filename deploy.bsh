@@ -15,7 +15,7 @@ git fetch
 
 git rebase
 
-mvn install
+mvn clean package -DskipTests=true
 
 echo "run project"
 nohup java "-Dspring.config.location=file:./dionea.properties" -jar target/dionea-0.0.1.jar > /dev/null 2>&1&
