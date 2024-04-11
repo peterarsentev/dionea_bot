@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="01" author="Arsentev Petr">
+        <createTable tableName="dionea_filter">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(2000)"/>
+        </createTable>
+        <createTable tableName="dionea_key">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(2000)"/>
+            <column name="filter_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_filter_id"
+                             references="dionea_filter(id)"/>
+            </column>
+        </createTable>
+        <createTable tableName="dionea_key_value">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="value" type="varchar(2000)"/>
+            <column name="key_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_key_id"
+                             references="dionea_key(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

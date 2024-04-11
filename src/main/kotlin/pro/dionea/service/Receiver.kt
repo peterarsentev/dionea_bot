@@ -1,6 +1,7 @@
-package pro.dionea
+package pro.dionea.service
 
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -20,7 +21,7 @@ class Receiver(val name: String, val token: String, val analysis: SpamAnalysis) 
                 send.replyToMessageId = message.messageId
                 execute(send)
                 GlobalScope.launch {
-                    Thread.sleep(10000)
+                    delay(10000)
                     execute(DeleteMessage(message.chatId.toString(), message.messageId))
                 }
             }

@@ -1,19 +1,21 @@
-package pro.dionea
+package pro.dionea.service
 
 import org.springframework.stereotype.Service
 
 @Service
 class SpamAnalysis {
-    val jobSynonym = setOf("работа", "рaбoтa", "заработок",
+    val jobSynonym = setOf("пoдрaбoткa", "работа", "рaбoтa", "заработок",
         "зaрaбoтoк", "поднимать", "заработка", "зароботка",
         "заработать", "работу", "доход",
         "трейдинг", "трейдингу", "трейдингом",
         "деятельность", "деятельностью",
-        "aрбитражу", "aрбитраж")
+        "aрбитражу", "aрбитраж",
+        "прибыли", "биржах", "лаве", "сотрудничества")
 
     val messageSynonym = setOf(
         "пиши", "напиши", "напишите", "пишите", "лс",
-        "детали", "детaли", "сообщениях", "пoиске"
+        "детали", "детaли", "сообщениях", "поиск", "пoиске", "бесплатно",
+        "обращайся"
     )
 
     fun isSpam(text: String): Boolean {

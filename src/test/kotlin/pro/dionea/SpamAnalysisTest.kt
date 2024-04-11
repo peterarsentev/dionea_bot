@@ -2,6 +2,7 @@ package pro.dionea
 
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
+import pro.dionea.service.SpamAnalysis
 
 class SpamAnalysisTest {
 
@@ -112,6 +113,74 @@ class SpamAnalysisTest {
                 "Нужны люди, чтoбы делaть лёгкие зaдaния в бoте в TG\n" +
                 "\n" +
                 "Пoлучить инфoрмaцию: нaйдите в пoиске rabota_382"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam12() {
+        val text = "\uD83D\uDCA5 Пoдрaбoткa oт нескoльких тысяч рублей ежедневнo. " +
+                "Удaлённo, зaкoннo, oпыт не требуется, без влoжений. Нaбирaем испoлнителей, " +
+                "чтoбы делaть лёгкие зaдaния в в телегрaм-бoте\n" +
+                "\n" +
+                "Узнaть детaли: ищите в пoиске work_828"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam13() {
+        val text = "В поиске людей, заинтересованных в получении " +
+                "дополнительной прибыли на удаленке. Частичная занятость, от 20 лет. Подробности в лс"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam14() {
+        val text = "⁉\uFE0F Ищeте заработок? Работайте прямо в Telegram!\n" +
+                "\n" +
+                "\uD83D\uDD38 Лёгкий заработок пять тысяч рублeй каждый дeнь\n" +
+                "\uD83D\uDD38 Всё лeгально\n" +
+                "\uD83D\uDD38 Работа в любоe врeмя\n" +
+                "\uD83D\uDD38 Доп. знания нe нужны\n" +
+                "\uD83D\uDD38 Вложeний ноль\n" +
+                "\uD83D\uDD38 Оплата каждый дeнь\n" +
+                "\n" +
+                "Вся информация \uD83D\uDC41\u200D\uD83D\uDDE8 напишитe в поиск \"rabota9492\""
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam15() {
+        val text = "‼\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F‼\uFE0F\n" +
+                "Возьму в команду 2-х ответственных ребят. \n" +
+                "Ра6отаем с крипт0валют0й\n" +
+                "Покажем бесплатно \n" +
+                "Все, делаете самостоятельно на своих биржах (все на официальный биржах крипт0валют)"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam16() {
+        val text = "В поиске людей, заинтересованных в получении дополнительной прибыли на удаленке. " +
+                "Частичная занятость, от 20 лет. Подробности в лс"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam17() {
+        val text = "ЕСТЬ ЖЕЛАНИЕ ОБУЧИТЬСЯ ПОДНИМАТЬ ЛАВЕ ОНЛАЙН?\uD83D\uDED1\n" +
+                "\uD83D\uDD01Делаю набор в мою личную команду\n" +
+                "\n" +
+                "\uD83D\uDCB5Поднимаем каждый день более 100\$\n" +
+                "\n" +
+                "\uD83D\uDC8EНАУЧУ БЕСПЛАТНО. Беру свою часть только после того как заработаете!\n" +
+                "\n" +
+                "\uD83D\uDCACЕсть вопросы? обращайся сюда. \uD83D\uDC49@hok_stand"
+        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam18() {
+        val text = "Добрый день, ищем ответственного человека для сотрудничества, в ЛС"
         assertThat(SpamAnalysis().isSpam(text)).isTrue()
     }
 }
