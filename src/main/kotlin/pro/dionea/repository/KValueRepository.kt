@@ -14,4 +14,8 @@ interface KValueRepository : CrudRepository<KValue, Int>{
     @Modifying(clearAutomatically = true)
     @Query("update dionea_key_value set value=:pValue where id=:pId")
     fun update(@Param("pValue") value: String , @Param("pId") id: Int)
+
+    fun findByKeyFilterId(filterId: Int): List<KValue>
+
+    fun findByKeyId(keyId: Int): List<KValue>
 }

@@ -21,4 +21,12 @@ class KValueService(val kvalueRepository: KValueRepository) {
 
     fun update(kvalue: KValue)
             = kvalueRepository.update(kvalue.value, kvalue.id!!)
+
+    fun findByKeyFilterId(filterId: Int): List<KValue>
+            = kvalueRepository.findByKeyFilterId(filterId)
+
+    fun findByKeyId(keyId: Int): Set<String>
+            = kvalueRepository.findByKeyId(keyId)
+        .map { it.value }
+        .toSet()
 }

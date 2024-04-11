@@ -19,7 +19,7 @@ class DeoneaApplication {
 		analysis: SpamAnalysis
 	) : TelegramBotsApi {
 		val tg = TelegramBotsApi(DefaultBotSession::class.java)
-		tg.registerBot(Receiver(name, token, SpamAnalysis()))
+		tg.registerBot(Receiver(name, token, analysis))
 		return tg
 	}
 }
