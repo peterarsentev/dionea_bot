@@ -4,6 +4,13 @@ import jakarta.persistence.*
 
 @Entity(name = "dionea_key_value")
 class KValue {
+    constructor()
+
+    constructor(key: Key, value: String) {
+        this.key = key
+        this.value = value
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
@@ -12,5 +19,5 @@ class KValue {
 
     @ManyToOne
     @JoinColumn(name = "key_id")
-    val key: Key = Key()
+    var key: Key = Key()
 }
