@@ -234,4 +234,25 @@ class SpamAnalysisTest {
         println(text + "\n\r")
 //        assertThat(SpamAnalysis().isSpam(text)).isTrue()
     }
+
+    @Test
+    fun isSpam20() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val key = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(key, "прибыль"))
+        kvalueRepository.save(KValue(key, "напиши"))
+        val text = "\uD83D\uDD01Провожу сбор в мою личную команду\n" +
+                "\uD83D\uDED1Прибыль от 600\$ в неделю.\uD83D\uDED1\n" +
+                "\uD83D\uDED1Прибыль с первого дня!\n" +
+                "\uD83E\uDD1DДля работы с нами тебе нужен смартфон и несколько часов  в день!\n" +
+                "\n" +
+                "\uD83D\uDCACНапиши по контактам, что бы получить больше информации  \uD83D\uDC49 @kake_ios";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+    }
 }

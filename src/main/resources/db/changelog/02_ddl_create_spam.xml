@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="02" author="Arsentev Petr">
+        <createTable tableName="dionea_spam">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="text" type="text"/>
+            <column name="time" type="datetime"/>
+            <column name="chat_id" type="numeric"/>
+            <column name="chat_name" type="text"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

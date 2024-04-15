@@ -1,7 +1,7 @@
 package pro.dionea.service
 
+import com.vdurmont.emoji.EmojiParser
 import org.springframework.stereotype.Service
-import pro.dionea.domain.KValue
 
 @Service
 class SpamAnalysis(
@@ -9,32 +9,19 @@ class SpamAnalysis(
     val keyService: KeyService,
     val kvalueService: KValueService) {
 
-//    val jobSynonym = setOf("пoдрaбoткa", "работа", "рaбoтa", "заработок",
-//        "зaрaбoтoк", "поднимать", "заработка", "зароботка",
-//        "заработать", "работу", "доход",
-//        "трейдинг", "трейдингу", "трейдингом",
-//        "деятельность", "деятельностью",
-//        "aрбитражу", "aрбитраж",
-//        "прибыли", "биржах", "лаве", "сотрудничества")
-//
-//    val messageSynonym = setOf(
-//        "пиши", "напиши", "напишите", "пишите", "лс",
-//        "детали", "детaли", "сообщениях", "поиск", "пoиске", "бесплатно",
-//        "обращайся"
-//    )
-
     fun isSpam(text: String): Boolean {
-        val lex = text
-            .replace(".", "")
-            .replace(",", " ")
-            .replace("+", " ")
-            .replace("!", " ")
-            .replace("?", " ")
-            .replace(":", " ")
-            .replace("\n", " ")
-            .split(" ")
-            .map { it.lowercase() }
-            .toSet();
+        val lex =
+            EmojiParser.removeAllEmojis(text)
+                .replace(".", "")
+                .replace(",", " ")
+                .replace("+", " ")
+                .replace("!", " ")
+                .replace("?", " ")
+                .replace(":", " ")
+                .replace("\n", " ")
+                .split(" ")
+                .map { it.lowercase() }
+                .toSet();
         for (filter in filterService.getAll()) {
             val keys = keyService.findByFilterId(filter.id!!)
             if (keys.isEmpty()) {
