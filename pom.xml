@@ -15,12 +15,13 @@
 	<name>dionea</name>
 	<description>Antispam Bot for telegram channels</description>
 
-	<repositories>
+	<distributionManagement>
 		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
+			<id>github</id>
+			<name>GitHub peterarsentev Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/peterarsentev/SpringFakeTest</url>
 		</repository>
-	</repositories>
+	</distributionManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
