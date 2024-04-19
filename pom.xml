@@ -15,20 +15,24 @@
 	<name>dionea</name>
 	<description>Antispam Bot for telegram channels</description>
 
-	<repositories>
-		<repository>
-			<id>github</id>
-			<name>GitHub Packages</name>
-			<url>https://maven.pkg.github.com/peterarsentev/SpringFakeTest</url>
-		</repository>
-	</repositories>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<kotlin.code.style>official</kotlin.code.style>
 		<java.version>17</java.version>
 		<kotlin.version>1.9.23</kotlin.version>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>SpringFakeTest</id>
+			<url>https://raw.github.com/peterarsentev/SpringFakeTest/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.vdurmont</groupId>
