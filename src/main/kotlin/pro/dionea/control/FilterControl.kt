@@ -8,12 +8,14 @@ import pro.dionea.domain.Filter
 import pro.dionea.service.FilterService
 import pro.dionea.service.KValueService
 import pro.dionea.service.KeyService
+import pro.dionea.service.SpamAnalysis
 
 @Controller
 @RequestMapping("/filter")
 class FilterControl(val filterService: FilterService,
                     val keyService: KeyService,
-                    val kvalueService: KValueService
+                    val kvalueService: KValueService,
+                    val spamAnalysis: SpamAnalysis
 ) {
     @GetMapping("/view/{filterId}")
     fun viewPage(@PathVariable("filterId") filterId: Int, model: Model): String {
@@ -23,6 +25,20 @@ class FilterControl(val filterService: FilterService,
         model["kvalue"] = kvalueService
             .findInKeys(keys.map { it.id!! }.toList())
             .groupBy { it.key.id }
+        return "filter/view"
+    }
+
+    @PostMapping("/check/{filterId}")
+    fun checkPage(@PathVariable("filterId") filterId: Int,
+                  @RequestParam("text") text: String, model: Model): String {
+        model["filter"] = filterService.findById(filterId)
+        val keys = keyService.findByFilterId(filterId)
+        model["keys"] = keys
+        model["kvalue"] = kvalueService
+            .findInKeys(keys.map { it.id!! }.toList())
+            .groupBy { it.key.id }
+        model["text"] = text
+        model["result"] = spamAnalysis.isSpam(text)
         return "filter/view"
     }
 

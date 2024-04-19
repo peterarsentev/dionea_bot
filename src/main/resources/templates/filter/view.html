@@ -73,6 +73,29 @@
                             </tr>
                             </tbody>
                         </table>
+                        <div>
+                            <p th:if="result" th:text="'Result: ' + ${result}"></p>
+                            <form class="mt-3" th:action="@{/filter/check/{filterId}(filterId=${filter.id})}" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label" for="text">Spam text</label>
+                                    <textarea class="form-control" rows="3"
+                                              id="text"
+                                              th:value="${text}"
+                                              name="text"
+                                              placeholder="Spam text">
+                                </textarea>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <button class="btn btn-primary w-100" type="submit">Check</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

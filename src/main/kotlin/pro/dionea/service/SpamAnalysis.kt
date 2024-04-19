@@ -10,6 +10,7 @@ class SpamAnalysis(
     val kvalueService: KValueService) {
 
     fun isSpam(text: String): Boolean {
+        val converted = ConvertedLetter()
         val lex =
             EmojiParser.removeAllEmojis(text)
                 .replace(".", "")
@@ -21,6 +22,7 @@ class SpamAnalysis(
                 .replace("\n", " ")
                 .split(" ")
                 .map { it.lowercase() }
+                .map { converted.englishToRussian(it) }
                 .toSet();
         for (filter in filterService.getAll()) {
             val keys = keyService.findByFilterId(filter.id!!)
