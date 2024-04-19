@@ -255,4 +255,24 @@ class SpamAnalysisTest {
 //                "\uD83D\uDCACНапиши по контактам, что бы получить больше информации  \uD83D\uDC49 @kake_ios";
 //        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
     }
+
+    @Test
+    fun isSpam21() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val key = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(key, "оплата"))
+        kvalueRepository.save(KValue(key, "поиске"))
+        val text = "\uD83E\uDD16 Платим за лёгкие задания в интернет\n" +
+                "\n" +
+                "Oт 4000-6000 рублей ежедневнo. Без нелегальных предлoжений и влoжения cредcтв. Oплата в любoе время. Чтoбы начать, требуетcя тoлькo запуcтить бoта\n" +
+                "\n" +
+                "✔\uFE0F Найди в пoиcке job_work089 и зарабатывай";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+    }
 }
