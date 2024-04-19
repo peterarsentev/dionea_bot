@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test
 import pro.dionea.domain.Filter
 import pro.dionea.domain.KValue
 import pro.dionea.domain.Key
+import pro.dionea.repository.FilterFakeRepository
+import pro.dionea.repository.KValueFakeRepository
+import pro.dionea.repository.KeyFakeRepository
 import pro.dionea.service.FilterService
 import pro.dionea.service.KValueService
 import pro.dionea.service.KeyService
@@ -16,22 +19,22 @@ class SpamAnalysisTest {
 
     @Test
     fun isSpam1() {
-//        val filterRepository = FilterFakeRepository()
-//        val filterService = FilterService(filterRepository)
-//        val keyRepository = KeyFakeRepository()
-//        val keyService = KeyService(keyRepository)
-//        val kvalueRepository = KValueFakeRepository()
-//        val kvalueService = KValueService(kvalueRepository)
-//        val filter = filterRepository.save(Filter(1))
-//        val key = keyRepository.save(Key(1, filter))
-//        kvalueRepository.save(KValue(key, "заработок"))
-//        kvalueRepository.save(KValue(key, "лс"))
-//        val text = "Нужны люди на удалённый заработок ! \n" +
-//                "18+ \n" +
-//                "Заработок возможен с любых устройств\n" +
-//                "От 175\$ в день\n" +
-//                "Пишите + в ЛС";
-//        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val key = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(key, "заработок"))
+        kvalueRepository.save(KValue(key, "лс"))
+        val text = "Нужны люди на удалённый заработок ! \n" +
+                "18+ \n" +
+                "Заработок возможен с любых устройств\n" +
+                "От 175\$ в день\n" +
+                "Пишите + в ЛС";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
     }
 
     @Test

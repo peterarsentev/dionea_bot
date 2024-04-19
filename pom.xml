@@ -15,6 +15,13 @@
 	<name>dionea</name>
 	<description>Antispam Bot for telegram channels</description>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<kotlin.code.style>official</kotlin.code.style>
@@ -123,6 +130,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>fake-test</artifactId>
+			<version>1.0.3</version>
 		</dependency>
 	</dependencies>
 

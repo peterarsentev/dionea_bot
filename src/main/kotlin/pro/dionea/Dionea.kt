@@ -12,7 +12,7 @@ import pro.dionea.service.SpamAnalysis
 import pro.dionea.service.SpamService
 
 @SpringBootApplication
-class DeoneaApplication {
+class Dionea {
 	@Bean
 	fun telegramApi(
 		@Value("\${tg.name}") name: String,
@@ -27,8 +27,8 @@ class DeoneaApplication {
 }
 
 fun main(args: Array<String>) {
-	val application = SpringApplication(DeoneaApplication::class.java)
+	val application = SpringApplication(Dionea::class.java)
 	application.addListeners(ApplicationPidFileWriter("./dionea.pid"))
 	application.run()
-	println("Go to http://localhost:8080/")
+	println("The application has started. Please go to http://localhost:8080/ to access it.")
 }

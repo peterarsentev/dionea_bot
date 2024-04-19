@@ -1,6 +1,6 @@
 package pro.dionea.service
 
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
@@ -14,6 +14,8 @@ class Receiver(val name: String, val token: String,
                val analysis: SpamAnalysis,
                val spamService: SpamService)
     : TelegramLongPollingBot() {
+
+    val scope = MainScope()
 
     override fun onUpdateReceived(update: Update) {
         if (update.hasMessage() && update.message.text != null) {
@@ -32,7 +34,7 @@ class Receiver(val name: String, val token: String,
                 )
                 send.replyToMessageId = message.messageId
                 val infoMsg = execute(send)
-                GlobalScope.launch {
+                scope.launch {
                     delay(10000)
                     execute(DeleteMessage(message.chatId.toString(), message.messageId))
                     execute(DeleteMessage(message.chatId.toString(), infoMsg.messageId))
