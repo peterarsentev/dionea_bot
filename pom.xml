@@ -24,12 +24,8 @@
 
 	<repositories>
 		<repository>
-			<id>SpringFakeTest</id>
-			<url>https://raw.github.com/peterarsentev/SpringFakeTest/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
 
@@ -137,9 +133,9 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>fake-test</artifactId>
-			<version>1.0.3</version>
+			<groupId>com.github.peterarsentev</groupId>
+			<artifactId>SpringFakeTest</artifactId>
+			<version>v.1.0.3</version>
 		</dependency>
 	</dependencies>
 
