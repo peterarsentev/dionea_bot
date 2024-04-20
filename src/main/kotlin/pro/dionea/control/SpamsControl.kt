@@ -13,6 +13,6 @@ class SpamsControl(val spamService: SpamService) {
     @GetMapping("/view")
     fun viewPage(model: Model): String {
         model["spams"] = spamService.getAll()
-        return "/spams/view"
+        return "spams/view"
     }
 }

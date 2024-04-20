@@ -13,6 +13,6 @@ class IndexControl(val filterService: FilterService) {
     @GetMapping(path = ["/", "/index"])
     fun indexPage(model : Model): String {
         model["filters"] = filterService.getAll()
-        return "/index"
+        return "index"
     }
 }
