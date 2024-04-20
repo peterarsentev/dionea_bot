@@ -27,8 +27,8 @@ class SpamAnalysisTest {
         val kvalueService = KValueService(kvalueRepository)
         val filter = filterRepository.save(Filter(1))
         val key = keyRepository.save(Key(1, filter))
-        kvalueRepository.save(KValue(key, "заработок"))
-        kvalueRepository.save(KValue(key, "лс"))
+        kvalueRepository.save(KValue(1, key, "заработок"))
+        kvalueRepository.save(KValue(2, key, "лс"))
         val text = "Нужны люди на удалённый заработок ! \n" +
                 "18+ \n" +
                 "Заработок возможен с любых устройств\n" +
@@ -266,13 +266,34 @@ class SpamAnalysisTest {
         val kvalueService = KValueService(kvalueRepository)
         val filter = filterRepository.save(Filter(1))
         val key = keyRepository.save(Key(1, filter))
-        kvalueRepository.save(KValue(key, "оплата"))
-        kvalueRepository.save(KValue(key, "поиске"))
+        kvalueRepository.save(KValue(1, key, "оплата"))
+        kvalueRepository.save(KValue(2, key, "поиске"))
         val text = "\uD83E\uDD16 Платим за лёгкие задания в интернет\n" +
                 "\n" +
                 "Oт 4000-6000 рублей ежедневнo. Без нелегальных предлoжений и влoжения cредcтв. Oплата в любoе время. Чтoбы начать, требуетcя тoлькo запуcтить бoта\n" +
                 "\n" +
                 "✔\uFE0F Найди в пoиcке job_work089 и зарабатывай";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam22() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "платим"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "поиске"))
+        val text = "\uD83D\uDC8E Платим за лёгкие задания в cети\n" +
+                "\n" +
+                "Oт 4-6 тыcяч р в день. Нет нарушения закoна и влoжений. Вывoди зарабoтаннoе в любoй мoмент. Чтoбы начать, неoбхoдимo тoлькo запуcтить бoта\n" +
+                "\n" +
+                "✳\uFE0F Пиши в пoиcке online_rabota8338 и начинай зарабатывать";
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
     }
 }

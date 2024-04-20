@@ -10,6 +10,9 @@ class SpamAnalysis(
     val kvalueService: KValueService) {
 
     fun isSpam(text: String): Boolean {
+        if (EmojiParser.extractEmojis(text).size >= 3) {
+            return true
+        }
         val converted = ConvertedLetter()
         val lex =
             EmojiParser.removeAllEmojis(text)

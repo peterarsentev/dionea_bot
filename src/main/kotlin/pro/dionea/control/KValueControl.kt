@@ -15,7 +15,7 @@ class KValueControl(val keyService: KeyService,
     @GetMapping("/create/{keyId}")
     fun createPage(@PathVariable("keyId") keyId: Int, model: Model): String {
         model["key"] = keyService.findById(keyId)
-        return "kvalue/create"
+        return "/kvalue/create"
     }
 
     @PostMapping("/create/{keyId}")
@@ -30,7 +30,7 @@ class KValueControl(val keyService: KeyService,
     @GetMapping("/update/{id}")
     fun updatePage(@PathVariable("id") id: Int, model: Model): String {
         model["kvalue"] = kvalueService.findById(id)
-        return "kvalue/update"
+        return "/kvalue/update"
     }
 
     @PostMapping("/update/{id}")

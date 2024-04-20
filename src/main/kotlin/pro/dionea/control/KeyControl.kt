@@ -16,7 +16,7 @@ class KeyControl(val filterService: FilterService, val keyService: KeyService) {
     @GetMapping("/create/{filterId}")
     fun viewPage(@PathVariable("filterId") filterId: Int, model: Model): String {
         model["filter"] = filterService.findById(filterId)
-        return "key/create"
+        return "/key/create"
     }
 
     @PostMapping("/create/{filterId}")

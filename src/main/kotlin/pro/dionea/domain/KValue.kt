@@ -6,7 +6,8 @@ import jakarta.persistence.*
 class KValue {
     constructor()
 
-    constructor(key: Key, value: String) {
+    constructor(id: Int, key: Key, value: String) {
+        this.id = id
         this.key = key
         this.value = value
     }

@@ -25,7 +25,7 @@ class FilterControl(val filterService: FilterService,
         model["kvalue"] = kvalueService
             .findInKeys(keys.map { it.id!! }.toList())
             .groupBy { it.key.id }
-        return "filter/view"
+        return "/filter/view"
     }
 
     @PostMapping("/check/{filterId}")
@@ -39,17 +39,17 @@ class FilterControl(val filterService: FilterService,
             .groupBy { it.key.id }
         model["text"] = text
         model["result"] = spamAnalysis.isSpam(text)
-        return "filter/view"
+        return "/filter/view"
     }
 
     @GetMapping("/create")
     fun createPage(): String {
-        return "filter/create"
+        return "/filter/create"
     }
 
     @PostMapping("/create")
     fun addFilter(@ModelAttribute filter: Filter): String {
         filterService.add(filter)
-        return "redirect:/index"
+        return "/redirect:/index"
     }
 }
