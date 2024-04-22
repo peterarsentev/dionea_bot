@@ -296,4 +296,74 @@ class SpamAnalysisTest {
                 "✳\uFE0F Пиши в пoиcке online_rabota8338 и начинай зарабатывать";
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
     }
+
+    @Test
+    fun isSpam23() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "подработка"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "поиске"))
+        val text = "\uD83D\uDCF2 Пoдрaбoткa oт 5 тыс. р кaждый день. Удaлённo, зaкoннo, oпыт не нужен, без влoжений. Нужнo будет делaть прoстые зaдaния в бoте в Telegram\n" +
+                "\n" +
+                "Узнaть детaли: нaпишите в пoиске work_828";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam24() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "заработок"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "личку"))
+        val text = "Прuвeт, нyжeн 1 чeлoвeк, прuятный yдaлённый зapaбoтoк, пoдрoбнocтu в лuчкy\uD83D\uDD1D\uD83C\uDD97";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam25() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "проект"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "лс"))
+        val text = "Здравствуйте, нужны люди, стремительно развивающий проект, на удалённой основе + в ЛС\uD83D\uDD25\uD83C\uDFE0";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+    }
+
+    @Test
+    fun isSpam26() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "кайф"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "лс"))
+        val text = "У меня есть то, что принесет тебе кайф.Заинтересовал?Пиши в лс."
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+    }
 }

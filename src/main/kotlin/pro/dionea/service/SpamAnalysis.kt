@@ -13,19 +13,14 @@ class SpamAnalysis(
         if (EmojiParser.extractEmojis(text).size >= 3) {
             return true
         }
+        val lang = IdentifyLang(text).lang()
         val converted = ConvertedLetter()
         val lex =
             EmojiParser.removeAllEmojis(text)
-                .replace(".", "")
-                .replace(",", " ")
-                .replace("+", " ")
-                .replace("!", " ")
-                .replace("?", " ")
-                .replace(":", " ")
-                .replace("\n", " ")
-                .split(" ")
+                .replace("[.,+~?!:;(){}\n]".toRegex(), " ")
+                .split("\\s+".toRegex())
                 .map { it.lowercase() }
-                .map { converted.englishToRussian(it) }
+                .map { if (lang == IdentifyLang.Lang.RUS) converted.englishToRussian(it) else it }
                 .toSet();
         for (filter in filterService.getAll()) {
             val keys = keyService.findByFilterId(filter.id!!)
