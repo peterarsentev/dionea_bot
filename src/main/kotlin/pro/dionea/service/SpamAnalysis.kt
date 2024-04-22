@@ -38,10 +38,12 @@ class SpamAnalysis(
         return false
     }
 
-    fun <T> Set<T>.containsAny(set: Set<T>) : Boolean {
-        for (el in this) {
-            if (set.contains(el)) {
-                return true
+    fun Set<String>.containsAny(baseWords: Set<String>) : Boolean {
+        for (messageWord in this) {
+            for (baseWord in baseWords) {
+                if (messageWord.contains(baseWord)) {
+                    return true
+                }
             }
         }
         return false

@@ -41,4 +41,13 @@ class KValueControl(val keyService: KeyService,
         kvalueService.update(kvalue)
         return "redirect:/filter/view/${kval.key.filter.id}"
     }
+
+    @GetMapping("/delete/{id}")
+    fun delete(@PathVariable("id") id: Int,
+               @ModelAttribute kvalue: KValue): String {
+        val kval = kvalueService.findById(id)
+        val filterId = kval!!.key.filter.id
+        kvalueService.deleteById(id)
+        return "redirect:/filter/view/${filterId}"
+    }
 }

@@ -29,4 +29,8 @@ class KValueService(val kvalueRepository: KValueRepository) {
             = kvalueRepository.findByKeyId(keyId)
         .map { it.value }
         .toSet()
+
+    fun deleteById(id: Int) {
+        kvalueRepository.deleteById(id)
+    }
 }
