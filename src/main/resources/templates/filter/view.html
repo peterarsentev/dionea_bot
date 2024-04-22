@@ -44,29 +44,29 @@
                             <tr th:each="key: ${keys}">
                                 <td>
                                     <div>
-                                        <a th:href="@{/kvalue/create/{keyId}(keyId=${key.id})}">
+                                        <a th:href="@{~/kvalue/create/{keyId}(keyId=${key.id})}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <span th:text="${key.name}"></span>
-                                        <a th:href="@{/kvalue/create/{keyId}(keyId=${key.id})}">
+                                        <a th:href="@{~/kvalue/create/{keyId}(keyId=${key.id})}">
                                             <i class="fas fa-remove"></i>
                                         </a>
                                     </div>
                                     <div th:if="kvalue[key.id]">
                                         <span class="badge text-bg-light m-1 border"
                                               th:each="kval: ${kvalue[key.id]}">
-                                             <a th:href="@{/kvalue/update/{id}(id=${kval.id})}">
+                                             <a th:href="@{~/kvalue/update/{id}(id=${kval.id})}">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                             <span th:text="${kval.value}"/>
-                                              <a th:href="@{/kvalue/delete/{id}(id=${kval.id})}">
+                                              <a th:href="@{~/kvalue/delete/{id}(id=${kval.id})}">
                                                         <i class="fas fa-remove pl-2"></i>
                                                     </a>
                                         </span>
                                     </div>
                                 </td>
                                 <td>
-                                    <a th:href="@{/kvalue/create/{keyId}(keyId=${key.id})}">
+                                    <a th:href="@{~/kvalue/create/{keyId}(keyId=${key.id})}">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </td>
@@ -75,7 +75,7 @@
                         </table>
                         <div>
                             <p th:if="result" th:text="'Result: ' + ${result}"></p>
-                            <form class="mt-3" th:action="@{/filter/check/{filterId}(filterId=${filter.id})}" method="post">
+                            <form class="mt-3" th:action="@{~/filter/check/{filterId}(filterId=${filter.id})}" method="post">
                                 <div class="mb-3">
                                     <label class="form-label" for="text">Spam text</label>
                                     <textarea class="form-control" rows="3"
