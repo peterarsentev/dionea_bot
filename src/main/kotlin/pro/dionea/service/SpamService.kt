@@ -18,4 +18,10 @@ class SpamService(val spamRepository: SpamRepository) {
 
     fun findById(spamId: Int): Spam?
     = spamRepository.findByIdOrNull(spamId)
+
+    fun findAllByOrderByTimeDesc(): List<Spam>
+            = spamRepository.findAllByOrderByTimeDesc()
+
+    fun findTop10ByOrderByTimeDesc(): List<Spam>
+            = spamRepository.findTop10ByOrderByTimeDesc()
 }

@@ -48,6 +48,24 @@
                 </tbody>
             </table>
         </div>
+        <div class="row">
+            <table class="table">
+                <tbody>
+                <tr th:each="message: ${spam}" class="border">
+                    <div>
+                        <span th:text="${message.chatName}"></span>
+                        <span th:text="${#dates.format(message.time.time,'dd.MM.yyyy HH:MM')}"></span>
+                    </div>
+                    <div>
+                        <small class="mb-2 text-muted">
+                            <span th:text="${message.text}"></span>
+                        </small>
+                    </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="03" author="Arsentev Petr">
+        <createTable tableName="dionea_vote">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="chat_id" type="numeric"/>
+            <column name="message_id" type="numeric"/>
+            <column name="user_id" type="numeric"/>
+            <column name="vote" type="int"/>
+        </createTable>
+        <addUniqueConstraint tableName="dionea_vote"
+                             columnNames="chat_id, message_id, user_id"
+                             constraintName="dionea_vote_chat_message_user"/>
+    </changeSet>
+</databaseChangeLog>

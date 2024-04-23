@@ -10,6 +10,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import pro.dionea.service.Receiver
 import pro.dionea.service.SpamAnalysis
 import pro.dionea.service.SpamService
+import pro.dionea.service.VoteService
 
 @SpringBootApplication
 class Dionea {
@@ -18,10 +19,11 @@ class Dionea {
 		@Value("\${tg.name}") name: String,
 		@Value("\${tg.token}") token: String,
 		analysis: SpamAnalysis,
-		spamService: SpamService
+		spamService: SpamService,
+		voteService: VoteService
 	) : TelegramBotsApi {
 		val tg = TelegramBotsApi(DefaultBotSession::class.java)
-		tg.registerBot(Receiver(name, token, analysis, spamService))
+		tg.registerBot(Receiver(name, token, analysis, spamService, voteService, name))
 		return tg
 	}
 }

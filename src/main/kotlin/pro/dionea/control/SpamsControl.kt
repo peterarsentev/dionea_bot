@@ -12,7 +12,7 @@ import pro.dionea.service.SpamService
 class SpamsControl(val spamService: SpamService) {
     @GetMapping("/view")
     fun viewPage(model: Model): String {
-        model["spams"] = spamService.getAll()
+        model["spams"] = spamService.findAllByOrderByTimeDesc()
         return "spams/view"
     }
 }
