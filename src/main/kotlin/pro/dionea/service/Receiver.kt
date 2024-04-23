@@ -20,7 +20,8 @@ class Receiver(val name: String, val token: String,
     override fun onUpdateReceived(update: Update) {
         if (update.hasMessage() && update.message.text != null) {
             val message = update.message
-            if (analysis.isSpam(message.text)) {
+            val spamReason = analysis.isSpam(message.text)
+            if (spamReason.spam) {
                 val spam = Spam().apply {
                     text = message.text
                     chatId = message.chat.id
@@ -29,8 +30,9 @@ class Receiver(val name: String, val token: String,
                 }
                 spamService.add(spam)
                 val send = SendMessage(
-                    message.chatId.toString(), "Обнаружен спам. " +
-                            "Сообщение будет удалено через 10 секунд."
+                    message.chatId.toString(), "Detected Spam. Reason:\n" +
+                            "${spamReason.text}\n" +
+                            "Message will be deleted in 10 seconds."
                 )
                 send.replyToMessageId = message.messageId
                 val infoMsg = execute(send)

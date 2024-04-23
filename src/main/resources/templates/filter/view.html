@@ -74,15 +74,15 @@
                             </tbody>
                         </table>
                         <div>
-                            <p th:if="result" th:text="'Result: ' + ${result}"></p>
+                            <pre th:text="'Result: \n' + ${result?.text}"></pre>
                             <form class="mt-3" th:action="@{~/filter/check/{filterId}(filterId=${filter.id})}" method="post">
                                 <div class="mb-3">
                                     <label class="form-label" for="text">Spam text</label>
                                     <textarea class="form-control" rows="3"
                                               id="text"
-                                              th:value="${text}"
                                               name="text"
                                               placeholder="Spam text">
+                                        [[${text}]]
                                 </textarea>
                                 </div>
                                 <div class="mb-3 row">
