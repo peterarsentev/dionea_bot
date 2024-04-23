@@ -34,6 +34,6 @@ class SpamAnalysisEnglishTextTest {
                 "Why not use your 5 to 6 hours to learn how  forxe trading market , work while waiting for your salary \n" +
                 "5 people are needed in this group to come and  learn forxes trading market online , to earn \$5,520 in 2 business days if interested ask how ⬇\uFE0F⬇\uFE0F\n" +
                 "CLICK ON LINK (http://t.me/+qXa2EeAOVUw0ZDY0)";
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 }

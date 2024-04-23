@@ -34,7 +34,7 @@ class SpamAnalysisTest {
                 "Заработок возможен с любых устройств\n" +
                 "От 175\$ в день\n" +
                 "Пишите + в ЛС";
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -44,7 +44,7 @@ class SpamAnalysisTest {
                 "\n" +
                 "Узнaть детaли: нaйдите в пoиске rabota_382";
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -59,7 +59,7 @@ class SpamAnalysisTest {
                 "\n" +
                 "\uD83D\uDC8EХочешь к нам? Пиши мне \uD83D\uDC49 @glass_koln";
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -67,7 +67,7 @@ class SpamAnalysisTest {
         val text = "Приглашаю желающих освоить возможности хорошего дополнительного заработка на удаленке. " +
                 "Опыт не обязателен, важны лишь желание и возраст от 20 лет. Детали в личных сообщениях.";
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -80,7 +80,7 @@ class SpamAnalysisTest {
                 "\n" +
                 "\uD83D\uDCE8\uD83D\uDCACИнтересует? Пиши! \uD83D\uDC49 @helix_oka";
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -90,7 +90,7 @@ class SpamAnalysisTest {
                 "Возраст от 20-ти лет, неполная занятость, ежедневный доход.\n" +
                 "Заинтересованных жду в л.с.";
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -101,7 +101,7 @@ class SpamAnalysisTest {
                 "1-2 часа времени в день\n" +
                 "Пиши в ЛС";
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -110,7 +110,7 @@ class SpamAnalysisTest {
                 "Хочу поделиться полезным материалом по трейдингу) " +
                 "Вдруг кому то будет интересно, пишите в личку)"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -120,7 +120,7 @@ class SpamAnalysisTest {
                 "От 250\$  в  день\n" +
                 "Кому интересно: Пишите + в лс"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -133,7 +133,7 @@ class SpamAnalysisTest {
                 "Беру только прoцент от вaшей чистой пpибыли, oплата прoцентов любым удобным способом\n" +
                 "По всем вопросам жду в личных сообщениях"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -144,7 +144,7 @@ class SpamAnalysisTest {
                 "\n" +
                 "Пoлучить инфoрмaцию: нaйдите в пoиске rabota_382"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -155,7 +155,7 @@ class SpamAnalysisTest {
                 "\n" +
                 "Узнaть детaли: ищите в пoиске work_828"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -163,7 +163,7 @@ class SpamAnalysisTest {
         val text = "В поиске людей, заинтересованных в получении " +
                 "дополнительной прибыли на удаленке. Частичная занятость, от 20 лет. Подробности в лс"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -179,7 +179,7 @@ class SpamAnalysisTest {
                 "\n" +
                 "Вся информация \uD83D\uDC41\u200D\uD83D\uDDE8 напишитe в поиск \"rabota9492\""
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -190,7 +190,7 @@ class SpamAnalysisTest {
                 "Покажем бесплатно \n" +
                 "Все, делаете самостоятельно на своих биржах (все на официальный биржах крипт0валют)"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -198,7 +198,7 @@ class SpamAnalysisTest {
         val text = "В поиске людей, заинтересованных в получении дополнительной прибыли на удаленке. " +
                 "Частичная занятость, от 20 лет. Подробности в лс"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -212,14 +212,14 @@ class SpamAnalysisTest {
                 "\n" +
                 "\uD83D\uDCACЕсть вопросы? обращайся сюда. \uD83D\uDC49@hok_stand"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
     fun isSpam18() {
         val text = "Добрый день, ищем ответственного человека для сотрудничества, в ЛС"
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -232,7 +232,7 @@ class SpamAnalysisTest {
                 "1 чαс времени вдень.\n" +
                 "Подробнее в лс."
         println(text + "\n\r")
-//        assertThat(SpamAnalysis().isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -253,7 +253,7 @@ class SpamAnalysisTest {
 //                "\uD83E\uDD1DДля работы с нами тебе нужен смартфон и несколько часов  в день!\n" +
 //                "\n" +
 //                "\uD83D\uDCACНапиши по контактам, что бы получить больше информации  \uD83D\uDC49 @kake_ios";
-//        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+//        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -273,7 +273,7 @@ class SpamAnalysisTest {
                 "Oт 4000-6000 рублей ежедневнo. Без нелегальных предлoжений и влoжения cредcтв. Oплата в любoе время. Чтoбы начать, требуетcя тoлькo запуcтить бoта\n" +
                 "\n" +
                 "✔\uFE0F Найди в пoиcке job_work089 и зарабатывай";
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -294,7 +294,7 @@ class SpamAnalysisTest {
                 "Oт 4-6 тыcяч р в день. Нет нарушения закoна и влoжений. Вывoди зарабoтаннoе в любoй мoмент. Чтoбы начать, неoбхoдимo тoлькo запуcтить бoта\n" +
                 "\n" +
                 "✳\uFE0F Пиши в пoиcке online_rabota8338 и начинай зарабатывать";
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -313,7 +313,7 @@ class SpamAnalysisTest {
         val text = "\uD83D\uDCF2 Пoдрaбoткa oт 5 тыс. р кaждый день. Удaлённo, зaкoннo, oпыт не нужен, без влoжений. Нужнo будет делaть прoстые зaдaния в бoте в Telegram\n" +
                 "\n" +
                 "Узнaть детaли: нaпишите в пoиске work_828";
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -330,7 +330,7 @@ class SpamAnalysisTest {
         val keyMessage = keyRepository.save(Key(2, filter))
         kvalueRepository.save(KValue(2, keyMessage, "личку"))
         val text = "Прuвeт, нyжeн 1 чeлoвeк, прuятный yдaлённый зapaбoтoк, пoдрoбнocтu в лuчкy\uD83D\uDD1D\uD83C\uDD97";
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -347,7 +347,7 @@ class SpamAnalysisTest {
         val keyMessage = keyRepository.save(Key(2, filter))
         kvalueRepository.save(KValue(2, keyMessage, "лс"))
         val text = "Здравствуйте, нужны люди, стремительно развивающий проект, на удалённой основе + в ЛС\uD83D\uDD25\uD83C\uDFE0";
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
     @Test
@@ -364,6 +364,6 @@ class SpamAnalysisTest {
         val keyMessage = keyRepository.save(Key(2, filter))
         kvalueRepository.save(KValue(2, keyMessage, "лс"))
         val text = "У меня есть то, что принесет тебе кайф.Заинтересовал?Пиши в лс."
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text)).isTrue()
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 }
