@@ -33,19 +33,20 @@ class SpamAnalysis(
         val out = StringBuilder()
         for (filter in filters) {
             val keys = fkeys.get(filter.id) ?: continue
+            var matched = 0
             for (key in keys) {
                 val baseWords = kvalues.get(key.id)!!.map { it.value }.toList()
                 val coincidences = lex.containsAny(baseWords)
                 if (coincidences.isNotEmpty()) {
+                    matched++
                     out.append("Marked by \"${filter.name}\": ${coincidences.joinToString(", ")}\n")
                 }
             }
+            if (matched == keys.size) {
+                return SpamReason(true, out.toString())
+            }
         }
-        return if (out.isNotEmpty()) {
-            SpamReason(true, out.toString())
-        } else  {
-            SpamReason(false, "No spam.")
-        }
+        return SpamReason(false, "No spam.")
     }
 
     fun Set<String>.containsAny(baseWords: List<String>) : List<String> {

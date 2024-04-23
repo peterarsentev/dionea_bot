@@ -74,7 +74,7 @@
                             </tbody>
                         </table>
                         <div>
-                            <pre th:text="'Result: \n' + ${result?.text}"></pre>
+                            <pre th:text="'Result:' + ${result?.text}"></pre>
                             <form class="mt-3" th:action="@{~/filter/check/{filterId}(filterId=${filter.id})}" method="post">
                                 <div class="mb-3">
                                     <label class="form-label" for="text">Spam text</label>
