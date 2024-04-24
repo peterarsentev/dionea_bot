@@ -1,34 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <!-- Required meta tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- fontawesome-free-6.3.0-web -->
-    <link th:href="@{~/webjars/font-awesome/6.3.0/css/all.min.css}" rel="stylesheet">
+    <link th:href="@{./../../webjars/font-awesome/6.3.0/css/all.min.css}" rel="stylesheet">
     <!-- Bootstrap 5.3.2 -->
-    <link th:href="@{~/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
-    <script th:src="@{~/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
+    <link th:href="@{./../../webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{./../../webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
     <!-- Popper.js 2.11.7 -->
-    <script th:src="@{~/webjars/popper.js/2.11.7/umd/popper.js}"></script>
+    <script th:src="@{./../../webjars/popper.js/2.11.7/umd/popper.js}"></script>
     <!-- Jquery.js 3.7.1 -->
-    <script th:src="@{~/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{./../../webjars/jquery/3.7.1/jquery.min.js}"></script>
     <!-- Summernote 0.8.10 -->
-    <link th:href="@{~/webjars/summernote/0.8.10/summernote-lite.css}" rel="stylesheet">
-    <script th:src="@{~/webjars/summernote/0.8.10/summernote-lite.js}"></script>
-    <script th:src="@{~/webjars/summernote/0.8.10/lang/summernote-ru-RU.js}"></script>
+    <link th:href="@{./../../webjars/summernote/0.8.10/summernote-lite.css}" rel="stylesheet">
+    <script th:src="@{./../../webjars/summernote/0.8.10/summernote-lite.js}"></script>
+    <script th:src="@{./../../webjars/summernote/0.8.10/lang/summernote-ru-RU.js}"></script>
 </head>
 <body>
 <div class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" th:href="@{~/index}">Dionea Bot</a>
+            <a class="navbar-brand" th:href="@{./../../index}">Dionea Bot</a>
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
-                    <a class="navbar-brand" th:href="@{~/index}">Dionea Bot</a>
-                    <a class="nav-item nav-link" th:href="@{~/key/create/{id}(id=${filter.id})}">Add key</a>
-                    <a class="nav-item nav-link" th:href="@{~/spams/view}">Spam</a>
+                    <a class="navbar-brand" th:href="@{./../../index}">Main</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{./../../key/create/{id}(id=${filter.id})}">Add key</a>
+                    <a class="nav-item nav-link" th:href="@{./../../spams/view}">Spam</a>
+                    <a class="nav-item nav-link" th:href="@{./../../login}">Login</a>
                 </div>
             </div>
         </div>
@@ -44,29 +46,29 @@
                             <tr th:each="key: ${keys}">
                                 <td>
                                     <div>
-                                        <a th:href="@{~/kvalue/create/{keyId}(keyId=${key.id})}">
+                                        <a sec:authorize="isAuthenticated()" th:href="@{./../../kvalue/create/{keyId}(keyId=${key.id})}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <span th:text="${key.name}"></span>
-                                        <a th:href="@{~/kvalue/create/{keyId}(keyId=${key.id})}">
+                                        <a sec:authorize="isAuthenticated()" th:href="@{./../../kvalue/create/{keyId}(keyId=${key.id})}">
                                             <i class="fas fa-remove"></i>
                                         </a>
                                     </div>
                                     <div th:if="kvalue[key.id]">
                                         <span class="badge text-bg-light m-1 border"
                                               th:each="kval: ${kvalue[key.id]}">
-                                             <a th:href="@{~/kvalue/update/{id}(id=${kval.id})}">
+                                             <a sec:authorize="isAuthenticated()" th:href="@{./../../kvalue/update/{id}(id=${kval.id})}">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                             <span th:text="${kval.value}"/>
-                                              <a th:href="@{~/kvalue/delete/{id}(id=${kval.id})}">
+                                              <a  sec:authorize="isAuthenticated()" th:href="@{./../../kvalue/delete/{id}(id=${kval.id})}">
                                                         <i class="fas fa-remove pl-2"></i>
                                                     </a>
                                         </span>
                                     </div>
                                 </td>
                                 <td>
-                                    <a th:href="@{~/kvalue/create/{keyId}(keyId=${key.id})}">
+                                    <a  sec:authorize="isAuthenticated()" th:href="@{./../../kvalue/create/{keyId}(keyId=${key.id})}">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </td>
@@ -75,7 +77,7 @@
                         </table>
                         <div>
                             <pre th:text="'Result:' + ${result?.text}"></pre>
-                            <form class="mt-3" th:action="@{~/filter/check/{filterId}(filterId=${filter.id})}" method="post">
+                            <form class="mt-3" th:action="@{./../../filter/check/{filterId}(filterId=${filter.id})}" method="post">
                                 <div class="mb-3">
                                     <label class="form-label" for="text">Spam text</label>
                                     <textarea class="form-control" rows="3"

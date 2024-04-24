@@ -1,41 +1,42 @@
 <!doctype html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <!-- Required meta tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- fontawesome-free-6.3.0-web -->
-    <link th:href="@{~/webjars/font-awesome/6.3.0/css/all.min.css}" rel="stylesheet">
+    <link th:href="@{./../../webjars/font-awesome/6.3.0/css/all.min.css}" rel="stylesheet">
     <!-- Bootstrap 5.3.2 -->
-    <link th:href="@{~/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
-    <script th:src="@{~/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
+    <link th:href="@{./../../webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{./../../webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
     <!-- Popper.js 2.11.7 -->
-    <script th:src="@{~/webjars/popper.js/2.11.7/umd/popper.js}"></script>
+    <script th:src="@{./../../webjars/popper.js/2.11.7/umd/popper.js}"></script>
     <!-- Jquery.js 3.7.1 -->
-    <script th:src="@{~/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{./../../webjars/jquery/3.7.1/jquery.min.js}"></script>
     <!-- Summernote 0.8.10 -->
-    <link th:href="@{~/webjars/summernote/0.8.10/summernote-lite.css}" rel="stylesheet">
-    <script th:src="@{~/webjars/summernote/0.8.10/summernote-lite.js}"></script>
-    <script th:src="@{~/webjars/summernote/0.8.10/lang/summernote-ru-RU.js}"></script>
+    <link th:href="@{./../../webjars/summernote/0.8.10/summernote-lite.css}" rel="stylesheet">
+    <script th:src="@{./../../webjars/summernote/0.8.10/summernote-lite.js}"></script>
+    <script th:src="@{./../../webjars/summernote/0.8.10/lang/summernote-ru-RU.js}"></script>
 </head>
 <body>
 <div class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">Job4jDreamJob</a>
+            <a class="navbar-brand" th:href="@{./../../index}">Dionea Bot</a>
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/">Главная</a>
-                    <a class="nav-item nav-link" th:href="@{~/vacancies}">Вакансии</a>
-                    <a class="nav-item nav-link" th:href="@{~/candidates}">Кандидаты</a>
-                    <a class="nav-item nav-link active" th:href="@{~/vacancies/create}">Создать вакансию</a>
+                    <a class="navbar-brand" th:href="@{./../../index}">Main</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{./../../key/create/{id}(id=${filter.id})}">Add key</a>
+                    <a class="nav-item nav-link" th:href="@{./../../spams/view}">Spam</a>
+                    <a class="nav-item nav-link" th:href="@{./../../login}">Login</a>
                 </div>
             </div>
         </div>
     </nav>
     <div class="container">
-        <form class="mt-3" th:action="@{~/key/create/{id}(id=${filter.id})}" method="post">
+        <form class="mt-3" th:action="@{./../../key/create/{id}(id=${filter.id})}" method="post">
             <div class="mb-3">
                 <label for="name" class="form-label"><b>Название</b></label>
                 <input type="text" class="form-control" id="name" name="name"
@@ -45,7 +46,7 @@
                 <div class="col-6"></div>
                 <div class="col-6">
                     <div class="row">
-                        <div class="col-6"><a class="btn btn-danger w-100" th:href="@{~/vacancies}">Отмена</a></div>
+                        <div class="col-6"><a class="btn btn-danger w-100" th:href="@{./../../key/create/{id}(id=${filter.id})}">Отмена</a></div>
                         <div class="col-6"><button class="btn btn-primary w-100" type="submit">Сохранить</button>
                         </div>
                     </div>

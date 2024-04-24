@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -19,3 +20,42 @@
     <script th:src="@{~/webjars/summernote/0.8.10/summernote-lite.js}"></script>
     <script th:src="@{~/webjars/summernote/0.8.10/lang/summernote-ru-RU.js}"></script>
 </head>
+<body>
+<div class="container-fluid p-0">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{./index}">Dionea Bot</a>
+            <div class="collapse navbar-collapse">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" th:href="@{./index}">Main</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{./filter/create}">Add filter</a>
+                    <a class="nav-item nav-link" th:href="@{./spams/view}">Spam</a>
+                    <a class="nav-item nav-link" th:href="@{./login}">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div th:if="${param.error}">
+                Invalid username and password.
+            </div>
+            <div th:if="${param.logout}">
+                You have been logged out.
+            </div>
+            <form th:action="@{./login}" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="username" class="form-control" id="username" >
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
