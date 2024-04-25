@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.ApplicationPidFileWriter
 import org.springframework.context.annotation.Bean
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import pro.dionea.service.Receiver
@@ -14,6 +15,9 @@ import pro.dionea.service.VoteService
 
 @SpringBootApplication
 class Dionea {
+	@Bean
+	fun encryptor() = BCryptPasswordEncoder()
+
 	@Bean
 	fun telegramApi(
 		@Value("\${tg.name}") name: String,
