@@ -6,12 +6,23 @@ import org.assertj.core.api.Assertions.*
 class ConvertedLetterTest {
 
     @Test
+    fun whenRussTextHasEgnlishLetter() {
+        val text = "Зaрaбoтoк oт нескoльких тысяч рублей кaждый день. Рaбoтa удaлённo, легaльнo, \" +\n" +
+                "                \"без oпытa, нет влoжений. Нужнo выпoлнять не слoжные зaдaния в бoте в TG\\n\" +\n" +
+                "                \"\\n\" +\n" +
+                "                \"Узнaть детaли: нaйдите в пoиске rabota_382"
+        val (word, size) = ConvertedLetter().englishToRussian(text)
+        assertThat(size).isEqualTo(30)
+    }
+
+    @Test
     fun whenEngAToRus() {
         val text = "кoмaнду"
         val expected = "команду"
         assertThat(text).isNotEqualTo(expected)
-        assertThat(ConvertedLetter().englishToRussian(text))
-            .isEqualTo(expected)
+        val (word, size) = ConvertedLetter().englishToRussian(text)
+        assertThat(word).isEqualTo(expected)
+        assertThat(size).isEqualTo(2)
     }
 
     @Test
@@ -19,7 +30,7 @@ class ConvertedLetterTest {
         val text = "зapaбoтoк"
         val expected = "заработок"
         assertThat(text).isNotEqualTo(expected)
-        assertThat(ConvertedLetter().englishToRussian(text))
+        assertThat(ConvertedLetter().englishToRussian(text).first)
             .isEqualTo(expected)
     }
 }

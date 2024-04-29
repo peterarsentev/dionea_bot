@@ -11,6 +11,10 @@ class SpamAnalysis(
     val keyService: KeyService,
     val kvalueService: KValueService) {
 
+    companion object {
+        const val CONVERTED_LETTERS = 20
+    }
+
     fun isSpam(text: String): SpamReason {
         if (text.length <= 50) {
             return SpamReason(false, "Too short.")
@@ -20,13 +24,25 @@ class SpamAnalysis(
         }
         val lang = IdentifyLang(text).lang()
         val converted = ConvertedLetter()
-        val lex =
-            EmojiParser.removeAllEmojis(text)
-                .replace("[.,+~?!:;(){}\n]".toRegex(), " ")
-                .split("\\s+".toRegex())
-                .map { it.lowercase() }
-                .map { if (lang == IdentifyLang.Lang.RUS) converted.englishToRussian(it) else it }
-                .toSet();
+        val lex = EmojiParser.removeAllEmojis(text)
+            .replace("[.,+~?!:;(){}\n]".toRegex(), " ")
+            .split("\\s+".toRegex())
+            .asSequence()
+            .filter { it.length > 2 }
+            .map { it.lowercase() }
+            .toSet()
+        val words =
+            if (lang == IdentifyLang.Lang.RUS) {
+               val convertedLetter = converted.englishToRussian(lex)
+                if (convertedLetter.second >= CONVERTED_LETTERS) {
+                    return SpamReason(true, "More than 20 letters are converted from English to Russian.")
+                } else {
+                    convertedLetter.first
+                }
+            } else {
+                lex
+            }
+
         val filters = filterService.getAll()
         val fkeys = keyService.getAll().groupBy { it.filter.id }
         val kvalues = kvalueService.getAll().groupBy { it.key.id }
@@ -36,7 +52,7 @@ class SpamAnalysis(
             var matched = 0
             for (key in keys) {
                 val baseWords = kvalues.get(key.id)!!.map { it.value }.toList()
-                val coincidences = lex.containsAny(baseWords)
+                val coincidences = words.containsAny(baseWords)
                 if (coincidences.isNotEmpty()) {
                     matched++
                     out.append("Marked by \"${filter.name}\": ${coincidences.joinToString(", ")}\n")
