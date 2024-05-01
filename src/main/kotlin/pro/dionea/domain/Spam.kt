@@ -1,10 +1,6 @@
 package pro.dionea.domain
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.sql.Timestamp
 
 @Entity(name = "dionea_spam")
@@ -22,4 +18,8 @@ class Spam {
 
     @Column(name = "chat_name")
     var chatName: String = ""
+
+    @ManyToOne
+    @JoinColumn(name = "contact_id")
+    var contact: Contact = Contact()
 }

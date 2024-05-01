@@ -42,16 +42,18 @@
                     <div class="card-body">
                         <table class="table">
                             <tbody>
-                            <tr th:each="spam: ${spams}" class="border">
-                                <div>
-                                    <span th:text="${spam.chatName}"></span>
-                                    <span th:text="${#dates.format(spam.time.time,'dd.MM.yyyy HH:MM')}"></span>
-                                </div>
-                                <div>
-                                    <small class="mb-2 text-muted">
-                                        <span th:text="${spam.text}"></span>
-                                    </small>
-                                </div>
+                            <tr th:each="spam: ${spams}">
+                                <td>
+                                    <div>
+                                        <span th:text="${spam.chatName}"></span> |
+                                        @<span th:text="${spam.contact.username}"></span> |
+                                        <span th:text="${#dates.format(spam.time.time,'dd.MM.yyyy HH:MM')}"></span>
+                                    </div>
+                                    <div>
+                                        <small class="mb-2 text-muted">
+                                            <span th:text="${spam.text}"></span>
+                                        </small>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>

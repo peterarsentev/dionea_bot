@@ -13,11 +13,11 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
+import pro.dionea.domain.Contact
 import pro.dionea.domain.Spam
 import pro.dionea.domain.User
 import pro.dionea.domain.Vote
 import java.sql.Timestamp
-
 
 class Receiver(val name: String, val token: String,
                val analysis: SpamAnalysis,
@@ -25,15 +25,26 @@ class Receiver(val name: String, val token: String,
                val voteService: VoteService,
                val userService: UserService,
                val encoding: PasswordEncoder,
+               val contactService: ContactService,
                val tgBotName: String)
     : TelegramLongPollingBot() {
 
     private fun deleteByVoteMessage(replyMessage: Message, targetMessage: Message) {
+        val spammer = contactService.findByName(replyMessage.from.userName)
+            ?: contactService.add(
+                Contact().apply {
+                    tgUserId = replyMessage.from.id
+                    username = replyMessage.from.userName
+                    firstName = replyMessage.from.firstName
+                    lastName = replyMessage.from.lastName
+                }
+            )
         val spam = Spam().apply {
             text = replyMessage.text
             chatId = replyMessage.chat.id
             chatName = replyMessage.chat.title
             time = Timestamp(System.currentTimeMillis())
+            contact = spammer
         }
         spamService.add(spam)
         execute(DeleteMessage(
@@ -147,11 +158,21 @@ class Receiver(val name: String, val token: String,
         }
         val spamReason = analysis.isSpam(message.text)
         if (spamReason.spam) {
+            val spammer = contactService.findByName(message.from.userName)
+                ?: contactService.add(
+                    Contact().apply {
+                        tgUserId = message.from.id
+                        username = message.from.userName
+                        firstName = message.from.firstName
+                        lastName = message.from.lastName
+                    }
+                )
             val spam = Spam().apply {
                 text = message.text
                 chatId = message.chat.id
                 chatName = message.chat.title
                 time = Timestamp(System.currentTimeMillis())
+                contact = spammer
             }
             spamService.add(spam)
             val send = SendMessage(

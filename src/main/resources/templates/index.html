@@ -42,27 +42,29 @@
                 <tr th:each="filter: ${filters}">
                     <td>
                         <a
-                           th:text="${filter.name}"
-                           th:href="@{./filter/view/{id}(id=${filter.id})}">
+                                th:text="${filter.name}"
+                                th:href="@{./filter/view/{id}(id=${filter.id})}">
                         </a>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div class="row">
+        <div class="row border" >
             <table class="table">
                 <tbody>
                 <tr th:each="message: ${spam}" class="border">
-                    <div>
-                        <span th:text="${message.chatName}"></span>
-                        <span th:text="${#dates.format(message.time.time,'dd.MM.yyyy HH:MM')}"></span>
-                    </div>
-                    <div>
-                        <small class="mb-2 text-muted">
-                            <span th:text="${message.text}"></span>
-                        </small>
-                    </div>
+                    <td>
+                        <div>
+                            <span th:text="${message.chatName}"></span> |
+                            @<span th:text="${message.contact.username}"></span> |
+                            <span th:text="${#dates.format(message.time.time,'dd.MM.yyyy HH:MM')}"></span>
+                        </div>
+                        <div>
+                            <small class="mb-2 text-muted">
+                                <span th:text="${message.text}"></span>
+                            </small>
+                        </div>
                     </td>
                 </tr>
                 </tbody>

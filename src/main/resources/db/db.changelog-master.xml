@@ -11,4 +11,5 @@
     <include file="changelog/04_ddl_create_users.xml" relativeToChangelogFile="true"/>
     <include file="changelog/05_dml_insert_users.xml" relativeToChangelogFile="true"/>
     <include file="changelog/06_dml_insert_role.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/07_ddl_create_contact.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

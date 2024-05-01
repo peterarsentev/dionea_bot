@@ -25,11 +25,13 @@ class Dionea {
 		spamService: SpamService,
 		voteService: VoteService,
 		userService: UserService,
-		encoder: PasswordEncoder
+		encoder: PasswordEncoder,
+		contactService: ContactService
 	) : TelegramBotsApi {
 		val tg = TelegramBotsApi(DefaultBotSession::class.java)
 		if (use) {
-			tg.registerBot(Receiver(name, token, analysis, spamService, voteService, userService, encoder, name))
+			tg.registerBot(Receiver(name, token, analysis, spamService, voteService, userService,
+				encoder, contactService, name))
 		}
 		return tg
 	}

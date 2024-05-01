@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="07" author="Arsentev Petr">
+        <createTable tableName="dionea_contact">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="tg_user_id" type="numeric">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="username" type="text">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="text"/>
+            <column name="last_name" type="text"/>
+        </createTable>
+        <insert tableName="dionea_contact">
+            <column name="tg_user_id" value="-1"/>
+            <column name="username" value="unknown"/>
+        </insert>
+        <addColumn schemaName="public"
+                   tableName="dionea_spam">
+            <column name="contact_id" defaultValueComputed="1" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="contact_id"
+                                 baseTableName="dionea_spam"
+                                 constraintName="fk_contact_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dionea_contact"/>
+    </changeSet>
+</databaseChangeLog>
