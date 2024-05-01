@@ -68,11 +68,11 @@ class Receiver(val name: String, val token: String,
             val rowsInline: MutableList<List<InlineKeyboardButton>> = ArrayList()
             val rowInline: MutableList<InlineKeyboardButton> = ArrayList()
             rowInline.add(InlineKeyboardButton().apply {
-                text = "Yes: $votesYes"
+                text = "Да: $votesYes"
                 callbackData = "yes"
             })
             rowInline.add(InlineKeyboardButton().apply {
-                text = "No: $votesNo"
+                text = "Нет: $votesNo"
                 callbackData = "no"
             })
             rowsInline.add(rowInline)
@@ -125,17 +125,17 @@ class Receiver(val name: String, val token: String,
         if (message.text.contains(tgBotName) && message.isReply) {
             val voteMessage = SendMessage().apply {
                 chatId = message.chatId.toString()
-                text = "Is it spam? Vote Yes 3 times."
+                text = "Это спам? Проголосуйте за 3 раза."
             }
             val markupInline = InlineKeyboardMarkup()
             val rowsInline: MutableList<List<InlineKeyboardButton>> = ArrayList()
             val rowInline: MutableList<InlineKeyboardButton> = ArrayList()
             rowInline.add(InlineKeyboardButton().apply {
-                text = "Yes: 0"
+                text = "Да: 0"
                 callbackData = "yes"
             })
             rowInline.add(InlineKeyboardButton().apply {
-                text = "No: 0"
+                text = "Нет: 0"
                 callbackData = "no"
             })
             rowsInline.add(rowInline)
@@ -155,9 +155,9 @@ class Receiver(val name: String, val token: String,
             }
             spamService.add(spam)
             val send = SendMessage(
-                message.chatId.toString(), "Detected Spam. Reason:\n" +
+                message.chatId.toString(), "Обнаружен спам:\n" +
                         "${spamReason.text}\n" +
-                        "Message will be deleted in 10 seconds."
+                        "Сообщение будет удалено через 10 секунд."
             )
             send.replyToMessageId = message.messageId
             val infoMsg = execute(send)

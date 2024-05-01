@@ -17,10 +17,10 @@ class SpamAnalysis(
 
     fun isSpam(text: String): SpamReason {
         if (text.length <= 50) {
-            return SpamReason(false, "Too short.")
+            return SpamReason(false, "Сообщение короткое.")
         }
         if (EmojiParser.extractEmojis(text).size >= 3) {
-            return SpamReason(true, "More than 3 emojis.")
+            return SpamReason(true, "Содержит более 3 эмоджи.")
         }
         val lang = IdentifyLang(text).lang()
         val converted = ConvertedLetter()
@@ -35,7 +35,7 @@ class SpamAnalysis(
             if (lang == IdentifyLang.Lang.RUS) {
                val convertedLetter = converted.englishToRussian(lex)
                 if (convertedLetter.second >= CONVERTED_LETTERS) {
-                    return SpamReason(true, "More than 20 letters are converted from English to Russian.")
+                    return SpamReason(true, "Русские буквы замены на английские.")
                 } else {
                     convertedLetter.first
                 }
@@ -55,14 +55,14 @@ class SpamAnalysis(
                 val coincidences = words.containsAny(baseWords)
                 if (coincidences.isNotEmpty()) {
                     matched++
-                    out.append("Marked by \"${filter.name}\": ${coincidences.joinToString(", ")}\n")
+                    out.append("Стоп-фильтр \"${filter.name}\": ${coincidences.joinToString(", ")}\n")
                 }
             }
             if (matched == keys.size) {
                 return SpamReason(true, out.toString())
             }
         }
-        return SpamReason(false, "No spam.")
+        return SpamReason(false, "Не спам")
     }
 
     fun Set<String>.containsAny(baseWords: List<String>) : List<String> {
