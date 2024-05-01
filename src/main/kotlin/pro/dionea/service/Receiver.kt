@@ -3,6 +3,7 @@ package pro.dionea.service
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import pro.dionea.domain.Spam
+import pro.dionea.domain.User
 import pro.dionea.domain.Vote
 import java.sql.Timestamp
 
@@ -21,6 +23,8 @@ class Receiver(val name: String, val token: String,
                val analysis: SpamAnalysis,
                val spamService: SpamService,
                val voteService: VoteService,
+               val userService: UserService,
+               val encoding: PasswordEncoder,
                val tgBotName: String)
     : TelegramLongPollingBot() {
 
@@ -84,6 +88,40 @@ class Receiver(val name: String, val token: String,
             return
         }
         val message = update.message
+        if (message.chat.type == "private") {
+            if (message.text.startsWith("/")) {
+                if ("/start" == message.text) {
+                    execute(
+                        SendMessage(message.chatId.toString(),
+                              "$tgBotName гибкий помощник для телеграмм групп:\n" +
+                                      "- анализирует и удаляет спам сообщения\n" +
+                                      "- поддерживает режим голосования за удаление сообщения или бан участника\n" +
+                                      "- позволяет настроить собственные стоп-фильтры через веб-интерфейс\n" +
+                                      "- публикация сообщений по расписанию\n\n" +
+                                      "Подробнее тут https://job4j.ru/dionea\n" +
+                                      "/reg - для регистрации пользователя"
+                        )
+                    )
+                }
+                if ("/reg" == message.text) {
+                    val pwd = KeyGen(8).generate()
+                    val user = userService.add(
+                        User().apply {
+                            username = message.from.userName
+                            password = encoding.encode(pwd)
+                            enabled = true
+                        }
+                    )
+                    execute(
+                        SendMessage(message.chatId.toString(),
+                            "Доступ к сайту https://job4j.ru/dionea\n" +
+                            "Логин: ${user.username}\n" +
+                            "Пароль: $pwd"
+                        )
+                    )
+                }
+            }
+        }
         if (message.text.contains(tgBotName) && message.isReply) {
             val voteMessage = SendMessage().apply {
                 chatId = message.chatId.toString()

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="04" author="Arsentev Petr">
+        <createTable tableName="dionea_role">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="dionea_user">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="username" type="text">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="boolean"/>
+            <column name="role_id" type="int">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="dionea_user"
+                                 constraintName="fk_role_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dionea_role"/>
+    </changeSet>
+</databaseChangeLog>

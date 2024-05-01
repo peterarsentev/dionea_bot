@@ -8,4 +8,7 @@
     <include file="changelog/01_ddl_create_filter.xml" relativeToChangelogFile="true"/>
     <include file="changelog/02_ddl_create_spam.xml" relativeToChangelogFile="true"/>
     <include file="changelog/03_ddl_create_vote.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/04_ddl_create_users.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/05_dml_insert_users.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/06_dml_insert_role.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

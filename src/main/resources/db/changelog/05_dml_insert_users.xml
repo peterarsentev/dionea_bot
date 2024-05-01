@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="05" author="Arsentev Petr">
+        <insert tableName="dionea_role">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+
+        <insert tableName="dionea_user">
+            <column name="username" value="root"/>
+            <column name="password" value="$2a$12$zD8AMBCfUJrWI0AiY.pwuenlyDscXa/AlC58NlRmUdvkdtrPYWaFS"/>
+            <column name="enabled" value="true"/>
+            <column name="role_id" value="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

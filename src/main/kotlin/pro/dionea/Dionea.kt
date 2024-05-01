@@ -6,12 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.ApplicationPidFileWriter
 import org.springframework.context.annotation.Bean
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
-import pro.dionea.service.Receiver
-import pro.dionea.service.SpamAnalysis
-import pro.dionea.service.SpamService
-import pro.dionea.service.VoteService
+import pro.dionea.service.*
 
 @SpringBootApplication
 class Dionea {
@@ -25,11 +23,13 @@ class Dionea {
 		@Value("\${tg.use}") use: Boolean,
 		analysis: SpamAnalysis,
 		spamService: SpamService,
-		voteService: VoteService
+		voteService: VoteService,
+		userService: UserService,
+		encoder: PasswordEncoder
 	) : TelegramBotsApi {
 		val tg = TelegramBotsApi(DefaultBotSession::class.java)
 		if (use) {
-			tg.registerBot(Receiver(name, token, analysis, spamService, voteService, name))
+			tg.registerBot(Receiver(name, token, analysis, spamService, voteService, userService, encoder, name))
 		}
 		return tg
 	}

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import org.springframework.security.provisioning.JdbcUserDetailsManager
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import javax.sql.DataSource
@@ -37,11 +38,18 @@ class WebSecurityConfig(val dataSource: DataSource) {
 
     @Bean
     fun user(encoder: PasswordEncoder): UserDetailsManager {
-        val admin = User.builder()
-            .username("admin")
-            .password(encoder.encode("admin"))
-            .roles("USER", "ADMIN")
-            .build()
-        return InMemoryUserDetailsManager(admin)
+        val jdbcUserDetailsManager = JdbcUserDetailsManager(dataSource)
+        jdbcUserDetailsManager.usersByUsernameQuery = """
+            SELECT u.username, u.password, u.enabled FROM dionea_user u 
+            WHERE u.username = ?
+        """
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+            """
+               SELECT u.username as username, r.name as authority FROM dionea_role r
+               INNER JOIN dionea_user u ON u.role_id = r.id 
+               AND u.username = ?
+               """
+        )
+        return jdbcUserDetailsManager
     }
 }
