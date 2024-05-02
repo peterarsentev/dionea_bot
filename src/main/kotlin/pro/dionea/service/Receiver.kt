@@ -3,7 +3,9 @@ package pro.dionea.service
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
@@ -13,20 +15,19 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import pro.dionea.domain.Contact
-import pro.dionea.domain.Spam
-import pro.dionea.domain.User
-import pro.dionea.domain.Vote
+import pro.dionea.domain.*
 import java.sql.Timestamp
 
-class Receiver(val name: String, val token: String,
+@Service
+class Receiver(@Value("\${tg.name}") val name: String,
+               @Value("\${tg.token}") val token: String,
                val analysis: SpamAnalysis,
                val spamService: SpamService,
                val voteService: VoteService,
                val userService: UserService,
                val encoding: PasswordEncoder,
                val contactService: ContactService,
-               val tgBotName: String)
+               val chatService: ChatService)
     : TelegramLongPollingBot() {
 
     private fun deleteByVoteMessage(replyMessage: Message, targetMessage: Message) {
@@ -41,10 +42,9 @@ class Receiver(val name: String, val token: String,
             )
         val spam = Spam().apply {
             text = replyMessage.text
-            chatId = replyMessage.chat.id
-            chatName = replyMessage.chat.title
             time = Timestamp(System.currentTimeMillis())
             contact = spammer
+            chat = findChat(replyMessage)
         }
         spamService.add(spam)
         execute(DeleteMessage(
@@ -90,7 +90,7 @@ class Receiver(val name: String, val token: String,
             markupInline.keyboard = rowsInline
             updateVote.replyMarkup = markupInline
             execute(updateVote)
-            if (votesYes >= 3) {
+            if (votesYes >= 1) {
                 deleteByVoteMessage(replyMessage, targetMessage)
             }
             return
@@ -99,18 +99,19 @@ class Receiver(val name: String, val token: String,
             return
         }
         val message = update.message
+        val chatStatistics = findChat(message)
         if (message.chat.type == "private") {
             if (message.text.startsWith("/")) {
                 if ("/start" == message.text) {
                     execute(
                         SendMessage(message.chatId.toString(),
-                              "$tgBotName гибкий помощник для телеграмм групп:\n" +
-                                      "- анализирует и удаляет спам сообщения\n" +
-                                      "- поддерживает режим голосования за удаление сообщения или бан участника\n" +
-                                      "- позволяет настроить собственные стоп-фильтры через веб-интерфейс\n" +
-                                      "- публикация сообщений по расписанию\n\n" +
-                                      "Подробнее тут https://job4j.ru/dionea\n" +
-                                      "/reg - для регистрации пользователя"
+                            "$name гибкий помощник для телеграмм групп:\n" +
+                                    "- анализирует и удаляет спам сообщения\n" +
+                                    "- поддерживает режим голосования за удаление сообщения или бан участника\n" +
+                                    "- позволяет настроить собственные стоп-фильтры через веб-интерфейс\n" +
+                                    "- публикация сообщений по расписанию\n\n" +
+                                    "Подробнее тут https://job4j.ru/dionea\n" +
+                                    "/reg - для регистрации пользователя"
                         )
                     )
                 }
@@ -126,14 +127,14 @@ class Receiver(val name: String, val token: String,
                     execute(
                         SendMessage(message.chatId.toString(),
                             "Доступ к сайту https://job4j.ru/dionea\n" +
-                            "Логин: ${user.username}\n" +
-                            "Пароль: $pwd"
+                                    "Логин: ${user.username}\n" +
+                                    "Пароль: $pwd"
                         )
                     )
                 }
             }
         }
-        if (message.text.contains(tgBotName) && message.isReply) {
+        if (message.text.contains(name) && message.isReply) {
             val voteMessage = SendMessage().apply {
                 chatId = message.chatId.toString()
                 text = "Это спам? Проголосуйте за 3 раза."
@@ -169,10 +170,9 @@ class Receiver(val name: String, val token: String,
                 )
             val spam = Spam().apply {
                 text = message.text
-                chatId = message.chat.id
-                chatName = message.chat.title
                 time = Timestamp(System.currentTimeMillis())
                 contact = spammer
+                chat = chatStatistics
             }
             spamService.add(spam)
             val send = SendMessage(
@@ -189,6 +189,16 @@ class Receiver(val name: String, val token: String,
             }
         }
     }
+
+    private fun findChat(message: Message) : Chat
+            = chatService.findByChatId(message.chatId)
+        ?: chatService.add(
+            Chat().apply {
+                chatId = message.chatId
+                username = message.chat.userName
+                title = message.chat.title
+            }
+        )
 
     override fun getBotToken(): String = token
 

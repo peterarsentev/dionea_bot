@@ -18,20 +18,12 @@ class Dionea {
 
 	@Bean
 	fun telegramApi(
-		@Value("\${tg.name}") name: String,
-		@Value("\${tg.token}") token: String,
 		@Value("\${tg.use}") use: Boolean,
-		analysis: SpamAnalysis,
-		spamService: SpamService,
-		voteService: VoteService,
-		userService: UserService,
-		encoder: PasswordEncoder,
-		contactService: ContactService
+		receiver: Receiver
 	) : TelegramBotsApi {
 		val tg = TelegramBotsApi(DefaultBotSession::class.java)
 		if (use) {
-			tg.registerBot(Receiver(name, token, analysis, spamService, voteService, userService,
-				encoder, contactService, name))
+			tg.registerBot(receiver)
 		}
 		return tg
 	}

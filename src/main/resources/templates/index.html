@@ -27,48 +27,73 @@
             <a class="navbar-brand" th:href="@{./index}">Dionea Bot</a>
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link active" th:href="@{./index}">Main</a>
-                    <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{./filter/create}">Add filter</a>
-                    <a class="nav-item nav-link" th:href="@{./spams/view}">Spam</a>
-                    <a class="nav-item nav-link" th:href="@{./login}">Login</a>
+                    <a class="nav-item nav-link active" th:href="@{./index}">Главная</a>
+                    <a class="nav-item nav-link" th:href="@{./filters/}">Стоп-фильтры</a>
+                    <a class="nav-item nav-link" th:href="@{./spams/view}">База спама</a>
+                    <a class="nav-item nav-link" th:href="@{./login}">Войти</a>
                 </div>
             </div>
         </div>
     </nav>
     <div class="container">
-        <div class="row">
-            <table class="table">
-                <tbody>
-                <tr th:each="filter: ${filters}">
-                    <td>
-                        <a
-                                th:text="${filter.name}"
-                                th:href="@{./filter/view/{id}(id=${filter.id})}">
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="row pt-3">
+            <div class="cell">
+                <div class="alert alert-info" role="alert">
+                    <span class="fw-bold">@dionea_bot</span> - гибкий помощник для телеграмм групп:<br/>
+                    - анализирует и удаляет спам сообщения<br/>
+                    - поддерживает режим голосования об удаление сообщения или бан участника<br/>
+                    - позволяет настроить собственные стоп-фильтры<br/>
+                    - поддерживает публикацию сообщений по расписанию<br/>
+                </div>
+            </div>
         </div>
-        <div class="row border" >
-            <table class="table">
-                <tbody>
-                <tr th:each="message: ${spam}" class="border">
-                    <td>
-                        <div>
-                            <span th:text="${message.chatName}"></span> |
-                            @<span th:text="${message.contact.username}"></span> |
-                            <span th:text="${#dates.format(message.time.time,'dd.MM.yyyy HH:MM')}"></span>
-                        </div>
-                        <div>
-                            <small class="mb-2 text-muted">
-                                <span th:text="${message.text}"></span>
-                            </small>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="row pb-3">
+            <div class="cell">
+                <div class="card">
+                    <h5 class="card-header">Количество чатов с @dionea_bot: [[${chats.size}]]</h5>
+                    <div class="card-body">
+                        <table class="table">
+                            <tbody>
+                            <tr th:each="chat: ${chats}">
+                                <td>
+                                    [[${chat.title}]]
+                                </td>
+                                <td>
+                                    @[[${chat.username}]]
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">
+                <div class="card">
+                    <h5 class="card-header">Отфильтровано за сегодня</h5>
+                    <div class="card-body">
+                        <table class="table">
+                            <tbody>
+                            <tr th:each="message: ${spam}" class="border">
+                                <td>
+                                    <div>
+                                        <span th:text="${message.chat.title}"></span> |
+                                        @<span th:text="${message.contact.username}"></span> |
+                                        <span th:text="${#dates.format(message.time.time,'dd.MM.yyyy HH:MM')}"></span>
+                                    </div>
+                                    <div>
+                                        <small class="mb-2 text-muted">
+                                            <span th:text="${message.text}"></span>
+                                        </small>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

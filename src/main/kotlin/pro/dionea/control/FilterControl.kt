@@ -17,6 +17,7 @@ class FilterControl(val filterService: FilterService,
                     val kvalueService: KValueService,
                     val spamAnalysis: SpamAnalysis
 ) {
+
     @GetMapping("/view/{filterId}")
     fun viewPage(@PathVariable("filterId") filterId: Int, model: Model): String {
         model["filter"] = filterService.findById(filterId)
