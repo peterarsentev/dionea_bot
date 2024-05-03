@@ -14,7 +14,6 @@ import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import javax.sql.DataSource
 
-
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig(val dataSource: DataSource) {

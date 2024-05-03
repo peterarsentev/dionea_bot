@@ -31,13 +31,14 @@ class Receiver(@Value("\${tg.name}") val name: String,
     : TelegramLongPollingBot() {
 
     private fun deleteByVoteMessage(replyMessage: Message, targetMessage: Message) {
-        val spammer = contactService.findByName(replyMessage.from.userName)
+        val name = replyMessage.from.userName ?: "unknown"
+        val spammer = contactService.findByName(name)
             ?: contactService.add(
                 Contact().apply {
                     tgUserId = replyMessage.from.id
-                    username = replyMessage.from.userName
+                    username = name
                     firstName = replyMessage.from.firstName
-                    lastName = replyMessage.from.lastName
+                    lastName = replyMessage.from.lastName  ?: ""
                 }
             )
         val spam = Spam().apply {
@@ -90,7 +91,7 @@ class Receiver(@Value("\${tg.name}") val name: String,
             markupInline.keyboard = rowsInline
             updateVote.replyMarkup = markupInline
             execute(updateVote)
-            if (votesYes >= 1) {
+            if (votesYes >= 3) {
                 deleteByVoteMessage(replyMessage, targetMessage)
             }
             return
@@ -159,13 +160,14 @@ class Receiver(@Value("\${tg.name}") val name: String,
         }
         val spamReason = analysis.isSpam(message.text)
         if (spamReason.spam) {
-            val spammer = contactService.findByName(message.from.userName)
+            val name = message.from.userName ?: "unknown"
+            val spammer = contactService.findByName(name)
                 ?: contactService.add(
                     Contact().apply {
                         tgUserId = message.from.id
-                        username = message.from.userName
+                        username = name
                         firstName = message.from.firstName
-                        lastName = message.from.lastName
+                        lastName = message.from.lastName ?: ""
                     }
                 )
             val spam = Spam().apply {
