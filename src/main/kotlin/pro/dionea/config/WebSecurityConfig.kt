@@ -24,7 +24,7 @@ class WebSecurityConfig(val dataSource: DataSource) {
         http
             .authorizeHttpRequests {
                     req -> req.requestMatchers("/", "/index",
-                "/webjars/**", "/spams/view", "/filter/view/**", "/filter/check/**",
+                "/webjars/**", "/spams/view", "/filter/view/**", "/check",
                     "/filters/").permitAll()
                 .anyRequest().authenticated()
             }

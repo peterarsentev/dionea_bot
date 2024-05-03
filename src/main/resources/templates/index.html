@@ -24,7 +24,6 @@
 <div class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" th:href="@{./index}">Dionea Bot</a>
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link active" th:href="@{./index}">Главная</a>
@@ -41,7 +40,7 @@
                 <div class="alert alert-info" role="alert">
                     <span class="fw-bold">@dionea_bot</span> - гибкий помощник для телеграмм групп:<br/>
                     - анализирует и удаляет спам сообщения<br/>
-                    - поддерживает режим голосования об удаление сообщения или бан участника<br/>
+                    - поддерживает режим голосования об удалении сообщения или бан участника<br/>
                     - позволяет настроить собственные стоп-фильтры<br/>
                     - поддерживает публикацию сообщений по расписанию<br/>
                 </div>
@@ -71,11 +70,43 @@
         <div class="row">
             <div class="cell">
                 <div class="card">
+                    <h5 class="card-header">Проверить сообщение на спам</h5>
+                    <div class="card-body">
+                        <div th:if="${result} != null AND !${result?.spam}" class="alert alert-success" role="alert">
+                            Текст сообщения не содержит спама
+                        </div>
+                        <div th:if="${result} != null AND ${result?.spam}" class="alert alert-danger" role="alert">
+                            Текст сообщения содрежит спам: [[${result?.text}]]
+                        </div>
+                        <form class="mt-3" th:action="@{./check}" method="post">
+                            <div class="mb-3">
+                                <textarea class="form-control" rows="3"
+                                          id="text"
+                                          name="text"
+                                          placeholder="Текст сообщения">[[${text}]]</textarea>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-primary w-100" type="submit">Проверить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">
+                <div class="card">
                     <h5 class="card-header">Отфильтровано за сегодня</h5>
                     <div class="card-body">
                         <table class="table">
                             <tbody>
-                            <tr th:each="message: ${spam}" class="border">
+                            <tr th:each="message: ${spam}">
                                 <td>
                                     <div>
                                         <span th:text="${message.chat.title}"></span> |

@@ -29,20 +29,6 @@ class FilterControl(val filterService: FilterService,
         return "filter/view"
     }
 
-    @PostMapping("/check/{filterId}")
-    fun checkPage(@PathVariable("filterId") filterId: Int,
-                  @RequestParam("text") text: String, model: Model): String {
-        model["filter"] = filterService.findById(filterId)
-        val keys = keyService.findByFilterId(filterId)
-        model["keys"] = keys
-        model["kvalue"] = kvalueService
-            .findInKeys(keys.map { it.id!! }.toList())
-            .groupBy { it.key.id }
-        model["text"] = text
-        model["result"] = spamAnalysis.isSpam(text)
-        return "filter/view"
-    }
-
     @GetMapping("/create")
     fun createPage(): String {
         return "filter/create"
