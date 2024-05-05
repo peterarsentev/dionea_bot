@@ -76,7 +76,7 @@
                             Текст сообщения не содержит спама
                         </div>
                         <div th:if="${result} != null AND ${result?.spam}" class="alert alert-danger" role="alert">
-                            Текст сообщения содрежит спам: [[${result?.text}]]
+                            Текст сообщения содержит спам: [[${result?.text}]]
                         </div>
                         <form class="mt-3" th:action="@{./check}" method="post">
                             <div class="mb-3">
