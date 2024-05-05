@@ -35,7 +35,7 @@ class SpamAnalysis(
             if (lang == IdentifyLang.Lang.RUS) {
                val convertedLetter = converted.englishToRussian(lex)
                 if (convertedLetter.second >= CONVERTED_LETTERS) {
-                    return SpamReason(true, "Русские буквы замены на английские.")
+                    return SpamReason(true, "Русские буквы заменены на английские.")
                 } else {
                     convertedLetter.first
                 }
