@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.ApplicationPidFileWriter
 import org.springframework.context.annotation.Bean
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import pro.dionea.service.*
@@ -29,7 +28,7 @@ class Dionea {
 	}
 }
 
-fun main(args: Array<String>) {
+fun main() {
 	val application = SpringApplication(Dionea::class.java)
 	application.addListeners(ApplicationPidFileWriter("./dionea.pid"))
 	application.run()

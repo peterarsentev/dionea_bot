@@ -13,4 +13,5 @@
     <include file="changelog/06_dml_insert_role.xml" relativeToChangelogFile="true"/>
     <include file="changelog/07_ddl_create_contact.xml" relativeToChangelogFile="true"/>
     <include file="changelog/08_ddl_create_chat.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/09_ddl_alter_contact_add_ham_spam.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

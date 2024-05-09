@@ -10,7 +10,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
@@ -149,22 +148,17 @@ class Receiver(
     }
 
     private fun handlePotentialSpam(message: Message, chatStatistics: Chat) {
+        val userContact = contactService.findIfNotCreate(message)
         val spamReason = analysis.isSpam(message.text)
+        contactService.increaseCountOfMessages(userContact, spamReason.spam)
+        if (userContact.isHammer()) {
+            return
+        }
         if (spamReason.spam) {
-            val name = message.from.userName ?: "unknown"
-            val spammer = contactService.findByName(name)
-                ?: contactService.add(
-                    Contact().apply {
-                        tgUserId = message.from.id
-                        username = name
-                        firstName = message.from.firstName
-                        lastName = message.from.lastName ?: ""
-                    }
-                )
             val spam = Spam().apply {
                 text = message.text
                 time = Timestamp(System.currentTimeMillis())
-                contact = spammer
+                contact = userContact
                 chat = chatStatistics
             }
             spamService.add(spam)

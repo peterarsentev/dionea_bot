@@ -22,4 +22,10 @@ class Contact {
 
     @Column(name = "last_name")
     var lastName: String = ""
+
+    var ham: Int = 0
+
+    var spam: Int = 0
+
+    fun isHammer(): Boolean = ham > spam
 }

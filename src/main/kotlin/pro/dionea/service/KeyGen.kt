@@ -5,8 +5,8 @@ class KeyGen(private val size: Int) {
 
     fun generate() : String {
         return (1 .. size)
-            .map { i -> kotlin.random.Random.nextInt(0, sequence.size) }
+            .map { _ -> kotlin.random.Random.nextInt(0, sequence.size) }
             .map(sequence::get)
-            .joinToString("");
+            .joinToString("")
     }
 }
