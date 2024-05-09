@@ -27,5 +27,7 @@ class Contact {
 
     var spam: Int = 0
 
+    var restrict: Boolean = false
+
     fun isHammer(): Boolean = ham > spam
 }

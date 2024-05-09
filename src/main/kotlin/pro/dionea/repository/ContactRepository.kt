@@ -10,6 +10,8 @@ import pro.dionea.domain.Contact
 interface ContactRepository : CrudRepository<Contact, Int>{
     fun findByUsername(username: String): Contact?
 
+    fun findByTgUserId(tgUserId: Long): Contact?
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update dionea_contact set spam = spam + 1 where id=:cId")

@@ -4,14 +4,11 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet id="09" author="Arsentev Petr">
+    <changeSet id="10" author="Arsentev Petr">
+
         <addColumn schemaName="public"
                    tableName="dionea_contact">
-            <column name="ham" defaultValueComputed="0" type="int"/>
-        </addColumn>
-        <addColumn schemaName="public"
-                   tableName="dionea_contact">
-            <column name="spam" defaultValueComputed="0" type="int"/>
+            <column name="restrict" defaultValueComputed="false" type="boolean"/>
         </addColumn>
     </changeSet>
 </databaseChangeLog>

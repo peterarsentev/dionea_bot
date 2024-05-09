@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.meta.api.methods.groupadministration.RestrictChatMember
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
+import org.telegram.telegrambots.meta.api.objects.ChatPermissions
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
@@ -36,17 +38,54 @@ class Receiver(
             return
         }
 
-        if (!update.hasMessage() || update.message.text == null) {
+        if (!update.hasMessage()) {
             return
         }
 
         val message = update.message
-        val chatStatistics = findChat(message)
+        if (message.newChatMembers.isNotEmpty()) {
+            handleNewChatMembers(message)
+            return
+        }
 
         when {
+            message.text == null -> return
             message.chat.type == "private" && message.text.startsWith("/") -> handlePrivateCommand(message)
             message.text.contains(name) && message.isReply -> handleSpamVoteRequest(message)
-            else -> handlePotentialSpam(message, chatStatistics)
+            else -> handlePotentialSpam(message, findChat(message))
+        }
+    }
+
+    private fun handleNewChatMembers(message: Message) {
+        val newMembers = message.newChatMembers
+        for (member in newMembers) {
+            val contact = contactService.findIfNotCreate(member)
+            if (member.userName == null) {
+                contactService.save(
+                    contact.apply {
+                        restrict = true
+                    }
+                )
+                execute(RestrictChatMember().apply {
+                    chatId = message.chatId.toString()
+                    userId = member.id
+                    permissions = ChatPermissions().apply {
+                        canSendMessages = false
+                    }
+                })
+                val msgInfo =  execute(SendMessage(
+                    message.chatId.toString(),
+                    "Здравствуйте, ${member.firstName}.\n" +
+                            "В вашем аккаунте скрыты контактные данные. \n" +
+                            "Обычно такие аккаунты рассылают спам сообщения, " +
+                            "поэтому мы ограничили вам доступ. \n" +
+                            "Сообщение будет удалено через 10 секунд."
+                ))
+                GlobalScope.launch {
+                    delay(10000)
+                    execute(DeleteMessage(message.chatId.toString(), msgInfo.messageId))
+                }
+            }
         }
     }
 
@@ -148,7 +187,7 @@ class Receiver(
     }
 
     private fun handlePotentialSpam(message: Message, chatStatistics: Chat) {
-        val userContact = contactService.findIfNotCreate(message)
+        val userContact = contactService.findIfNotCreate(message.from)
         val spamReason = analysis.isSpam(message.text)
         contactService.increaseCountOfMessages(userContact, spamReason.spam)
         if (userContact.isHammer()) {
@@ -190,7 +229,7 @@ class Receiver(
     private fun deleteByVoteMessage(replyMessage: Message, targetMessage: Message) {
         val name = replyMessage.from.userName ?: "unknown"
         val spammer = contactService.findByName(name)
-            ?: contactService.add(
+            ?: contactService.save(
                 Contact().apply {
                     tgUserId = replyMessage.from.id
                     username = name

@@ -1,25 +1,23 @@
 package pro.dionea.service
 
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.objects.User
 import pro.dionea.domain.Contact
 import pro.dionea.repository.ContactRepository
 
 @Service
 class ContactService(val contactRepository: ContactRepository) {
 
-    fun findIfNotCreate(message: Message) : Contact {
-        val name = message.from.userName ?: "unknown"
-        return findByName(name)
-            ?: add(
-                Contact().apply {
-                    tgUserId = message.from.id
-                    username = name
-                    firstName = message.from.firstName
-                    lastName = message.from.lastName ?: ""
-                }
-            )
-    }
+    fun findIfNotCreate(user: User) : Contact
+            = findByTgUserId(user.id)
+        ?: save(
+            Contact().apply {
+                tgUserId = user.id
+                username = user.userName ?: "unknown"
+                firstName = user.firstName
+                lastName = user.lastName ?: ""
+            }
+        )
 
     fun increaseCountOfMessages(contact: Contact, spam: Boolean) {
         if (spam) {
@@ -29,8 +27,12 @@ class ContactService(val contactRepository: ContactRepository) {
         }
     }
 
-    fun add(contact: Contact) : Contact = contactRepository.save(contact)
+    fun save(contact: Contact) : Contact
+            = contactRepository.save(contact)
 
     fun findByName(username: String): Contact?
             = contactRepository.findByUsername(username)
+
+    fun findByTgUserId(tgUserId: Long): Contact?
+            = contactRepository.findByTgUserId(tgUserId)
 }
