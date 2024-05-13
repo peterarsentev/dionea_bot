@@ -53,6 +53,10 @@ class SpamAnalysis(
             for (key in keys) {
                 val baseWords = kvalues.get(key.id)!!.map { it.value }.toList()
                 val coincidences = words.containsAny(baseWords)
+                if (coincidences.size >= 3) {
+                    return SpamReason(true,
+                        "Стоп-фильтр \"${filter.name}\": ${coincidences.joinToString(", ")}\n")
+                }
                 if (coincidences.isNotEmpty()) {
                     matched++
                     out.append("Стоп-фильтр \"${filter.name}\": ${coincidences.joinToString(", ")}\n")
