@@ -13,5 +13,5 @@ class ChatService(val chatRepository: ChatRepository) {
             = chatRepository.findByChatId(chatId)
 
     fun getAll(): List<Chat>
-            = chatRepository.findAll().toList()
+            = chatRepository.findAll().toCollection(ArrayList<Chat>())
 }

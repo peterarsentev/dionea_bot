@@ -60,7 +60,7 @@ class Receiver(
         val newMembers = message.newChatMembers
         for (member in newMembers) {
             val contact = contactService.findIfNotCreate(member)
-            if (member.userName == null) {
+            if (member.userName == null || member.userName.isEmpty()) {
                 contactService.save(
                     contact.apply {
                         restrict = true

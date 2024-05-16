@@ -15,4 +15,5 @@
     <include file="changelog/08_ddl_create_chat.xml" relativeToChangelogFile="true"/>
     <include file="changelog/09_ddl_alter_contact_add_ham_spam.xml" relativeToChangelogFile="true"/>
     <include file="changelog/10_ddl_alter_contact_add_restrict.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/11_ddl_alter_contact_drop_constraint.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
