@@ -111,6 +111,7 @@
                                     <div>
                                         <span th:text="${message.chat.title}"></span> |
                                         @<span th:text="${message.contact.username}"></span> |
+                                        <span th:text="${message.contact.ham}"></span>/<span th:text="${message.contact.spam}"></span> |
                                         <span th:text="${#dates.format(message.time.time,'dd.MM.yyyy HH:MM')}"></span>
                                     </div>
                                     <div>

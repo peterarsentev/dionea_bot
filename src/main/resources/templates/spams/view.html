@@ -46,6 +46,7 @@
                                     <div>
                                         <span th:text="${spam.chat.title}"></span> |
                                         @<span th:text="${spam.contact.username}"></span> |
+                                        <span th:text="${spam.contact.ham}"></span>/<span th:text="${spam.contact.spam}"></span>
                                         <span th:text="${#dates.format(spam.time.time,'dd.MM.yyyy HH:MM')}"></span>
                                     </div>
                                     <div>
