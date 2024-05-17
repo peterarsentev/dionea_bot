@@ -227,16 +227,8 @@ class Receiver(
         )
 
     private fun deleteByVoteMessage(replyMessage: Message, targetMessage: Message) {
-        val name = replyMessage.from.userName ?: "unknown"
-        val spammer = contactService.findByName(name)
-            ?: contactService.save(
-                Contact().apply {
-                    tgUserId = replyMessage.from.id
-                    username = name
-                    firstName = replyMessage.from.firstName
-                    lastName = replyMessage.from.lastName  ?: ""
-                }
-            )
+        val spammer = contactService.findIfNotCreate(replyMessage.from)
+        contactService.increaseCountOfMessages(spammer, true)
         val spam = Spam().apply {
             text = replyMessage.text
             time = Timestamp(System.currentTimeMillis())
