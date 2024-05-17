@@ -30,9 +30,6 @@ class ContactService(val contactRepository: ContactRepository) {
     fun save(contact: Contact) : Contact
             = contactRepository.save(contact)
 
-    fun findByName(username: String): Contact?
-            = contactRepository.findByUsername(username)
-
     fun findByTgUserId(tgUserId: Long): Contact?
             = contactRepository.findByTgUserId(tgUserId)
 }
