@@ -230,7 +230,7 @@ class Receiver(
         val spammer = contactService.findIfNotCreate(replyMessage.from)
         contactService.increaseCountOfMessages(spammer, true)
         val spam = Spam().apply {
-            text = replyMessage.text
+            text = if (isMessageWithImage(targetMessage)) "Содержит фото" else replyMessage.text
             time = Timestamp(System.currentTimeMillis())
             contact = spammer
             chat = findChat(replyMessage)
@@ -240,10 +240,10 @@ class Receiver(
             replyMessage.chatId.toString(),
             targetMessage.messageId
         ))
-        execute(DeleteMessage(
-            replyMessage.chatId.toString(),
-            replyMessage.messageId
-        ))
+    }
+
+    private fun isMessageWithImage(message: Message): Boolean {
+        return message.photo != null && message.photo.isNotEmpty()
     }
 
     override fun getBotToken(): String = token
