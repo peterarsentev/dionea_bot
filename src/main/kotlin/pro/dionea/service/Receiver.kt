@@ -240,6 +240,10 @@ class Receiver(
             replyMessage.chatId.toString(),
             targetMessage.messageId
         ))
+        execute(DeleteMessage(
+            replyMessage.chatId.toString(),
+            replyMessage.messageId
+        ))
     }
 
     private fun isMessageWithImage(message: Message): Boolean {
