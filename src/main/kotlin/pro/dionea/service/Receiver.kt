@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.meta.api.methods.GetFile
 import org.telegram.telegrambots.meta.api.methods.groupadministration.RestrictChatMember
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
@@ -16,8 +17,16 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import pro.dionea.domain.*
+import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.IOException
+import java.net.URL
 import java.sql.Timestamp
+import javax.imageio.ImageIO
+
 
 @Service
 class Receiver(
@@ -29,7 +38,8 @@ class Receiver(
     val userService: UserService,
     val encoding: PasswordEncoder,
     val contactService: ContactService,
-    val chatService: ChatService
+    val chatService: ChatService,
+    val detectImageService: DetectImageService
 ) : TelegramLongPollingBot() {
 
     override fun onUpdateReceived(update: Update) {
@@ -49,11 +59,55 @@ class Receiver(
         }
 
         when {
+            message.isMessageWithImage() -> handleRacyImageRequest(message)
             message.text == null -> return
             message.chat.type == "private" && message.text.startsWith("/") -> handlePrivateCommand(message)
             message.text.contains(name) && message.isReply -> handleSpamVoteRequest(message)
             else -> handlePotentialSpam(message, findChat(message))
         }
+    }
+
+    private fun handleRacyImageRequest(message: Message) {
+        val userContact = contactService.findIfNotCreate(message.from)
+        for (photo in message.photo) {
+            val img = getBufferedImageFromTelegramPhoto(photo.fileId)
+            val category = detectImageService.detect(img)
+            if (category == ImageCategory.PORN || category == ImageCategory.SEXY) {
+                val spam = Spam().apply {
+                    text = "Contains $category"
+                    time = Timestamp(System.currentTimeMillis())
+                    contact = userContact
+                    chat = findChat(message)
+                }
+                spamService.add(spam)
+                val send = SendMessage(
+                    message.chatId.toString(),
+                    """
+                            Сообщение включает оскорбительное изображение. 
+                            Оно будет удалено через 10 секунд.
+                         """.trimIndent()
+                )
+                send.replyToMessageId = message.messageId
+                val infoMsg = execute(send)
+                GlobalScope.launch {
+                    delay(10000)
+                    execute(DeleteMessage(message.chatId.toString(), message.messageId))
+                    execute(DeleteMessage(message.chatId.toString(), infoMsg.messageId))
+                }
+                break
+            }
+        }
+    }
+
+    @Throws(IOException::class, TelegramApiException::class)
+    private fun getBufferedImageFromTelegramPhoto(fileId: String): BufferedImage {
+        val getFileMethod = GetFile()
+        getFileMethod.fileId = fileId
+        val file = execute(getFileMethod)
+        val fileUrl = "https://api.telegram.org/file/bot" + getBotToken() + "/" + file.getFilePath()
+        val url = URL(fileUrl)
+        val bais = ByteArrayInputStream(url.openStream().readAllBytes())
+        return ImageIO.read(bais)
     }
 
     private fun handleNewChatMembers(message: Message) {
@@ -90,21 +144,22 @@ class Receiver(
     }
 
     private fun handleCallbackQuery(update: Update) {
-        val replyMessage = update.callbackQuery.message.replyToMessage ?: return
-        val targetMessage = update.callbackQuery.message
+        val spamMessage = update.callbackQuery.message.replyToMessage ?: return
+        val chtId = spamMessage.chat.id
+        val replyMessage = update.callbackQuery.message
         val voteByContact = if (update.callbackQuery.data == "yes") Vote.YES else Vote.NO
         voteService.save(Vote().apply {
-            chatId = replyMessage.chat.id
-            messageId = replyMessage.messageId.toLong()
+            chatId = chtId
+            messageId = spamMessage.messageId.toLong()
             userId = update.callbackQuery.from.id
             vote = voteByContact
         })
-        val votes = voteService.findByMessageId(replyMessage.messageId.toLong())
+        val votes = voteService.findByMessageId(spamMessage.messageId.toLong())
         val votesYes = votes.count { it.vote == Vote.YES }
         val votesNo = votes.size - votesYes
         val updateVote = EditMessageReplyMarkup().apply {
-            chatId = replyMessage.chat.id.toString()
-            messageId = targetMessage.messageId
+            chatId = chtId.toString()
+            messageId = replyMessage.messageId
         }
         val markupInline = InlineKeyboardMarkup()
         val rowsInline: MutableList<List<InlineKeyboardButton>> = ArrayList()
@@ -122,7 +177,10 @@ class Receiver(
         updateVote.replyMarkup = markupInline
         execute(updateVote)
         if (votesYes >= 3) {
-            deleteByVoteMessage(replyMessage, targetMessage)
+            deleteByVoteMessage(spamMessage, replyMessage)
+        }
+        if (votesNo >= 3) {
+            execute(DeleteMessage(chtId.toString(), replyMessage.messageId))
         }
     }
 
@@ -226,28 +284,29 @@ class Receiver(
             }
         )
 
-    private fun deleteByVoteMessage(replyMessage: Message, targetMessage: Message) {
-        val spammer = contactService.findIfNotCreate(replyMessage.from)
+    private fun deleteByVoteMessage(spamMessage: Message, replyMessage: Message) {
+        val chtId = spamMessage.chatId.toString()
+        val spammer = contactService.findIfNotCreate(spamMessage.from)
         contactService.increaseCountOfMessages(spammer, true)
         val spam = Spam().apply {
-            text = if (isMessageWithImage(targetMessage)) "Содержит фото" else replyMessage.text
+            text = if (spamMessage.isMessageWithImage()) "Содержит фото" else spamMessage.text
             time = Timestamp(System.currentTimeMillis())
             contact = spammer
-            chat = findChat(replyMessage)
+            chat = findChat(spamMessage)
         }
         spamService.add(spam)
         execute(DeleteMessage(
-            replyMessage.chatId.toString(),
-            targetMessage.messageId
+            chtId,
+            replyMessage.messageId
         ))
         execute(DeleteMessage(
-            replyMessage.chatId.toString(),
-            replyMessage.messageId
+            chtId,
+            spamMessage.messageId
         ))
     }
 
-    private fun isMessageWithImage(message: Message): Boolean {
-        return message.photo != null && message.photo.isNotEmpty()
+    private fun Message.isMessageWithImage(): Boolean {
+        return photo != null && photo.isNotEmpty()
     }
 
     override fun getBotToken(): String = token
