@@ -59,7 +59,7 @@ class Receiver(
             handleNewChatMembers(message)
             return
         }
-
+        log.debug("Message contains text ${message.text}")
         when {
             message.isMessageWithImage() -> handleRacyImageRequest(message)
             message.text == null -> return
@@ -74,12 +74,12 @@ class Receiver(
         for (photo in message.photo) {
             val img = getBufferedImageFromTelegramPhoto(photo.fileId)
             val category = detectImageService.detect(img)
-//            val textImg = textExtractionService.extract(img)
-//            log.debug("Image contains a text [$textImg]")
-//            val resultSpam = spamAnalysis.isSpam(textImg)
+            val textImg = textExtractionService.extract(img)
+            log.debug("Image contains a text [$textImg]")
+            val resultSpam = spamAnalysis.isSpam(textImg)
             if (category == ImageCategory.PORN
                 || category == ImageCategory.SEXY
-                ) {
+                || resultSpam.spam) {
                 val spam = Spam().apply {
                     text = "Изображение содержит $category"
                     time = Timestamp(System.currentTimeMillis())
