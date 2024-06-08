@@ -37,6 +37,6 @@ class FilterControl(val filterService: FilterService,
     @PostMapping("/create")
     fun addFilter(@ModelAttribute filter: Filter): String {
         filterService.add(filter)
-        return "redirect:/index"
+        return "redirect:/filters/"
     }
 }
