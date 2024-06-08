@@ -31,6 +31,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>net.sourceforge.tess4j</groupId>
+			<artifactId>tess4j</artifactId>
+			<version>4.5.4</version>
+		</dependency>
+		<dependency>
 			<groupId>org.tensorflow</groupId>
 			<artifactId>tensorflow</artifactId>
 			<version>1.15.0</version>

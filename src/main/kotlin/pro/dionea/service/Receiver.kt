@@ -21,7 +21,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import pro.dionea.domain.*
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
-import java.io.File
 import java.io.IOException
 import java.net.URL
 import java.sql.Timestamp
@@ -32,14 +31,15 @@ import javax.imageio.ImageIO
 class Receiver(
     @Value("\${tg.name}") val name: String,
     @Value("\${tg.token}") val token: String,
-    val analysis: SpamAnalysis,
+    val spamAnalysis: SpamAnalysis,
     val spamService: SpamService,
     val voteService: VoteService,
     val userService: UserService,
     val encoding: PasswordEncoder,
     val contactService: ContactService,
     val chatService: ChatService,
-    val detectImageService: DetectImageService
+    val detectImageService: DetectImageService,
+    val textExtractionService: TextExtractionService
 ) : TelegramLongPollingBot() {
 
     override fun onUpdateReceived(update: Update) {
@@ -72,9 +72,12 @@ class Receiver(
         for (photo in message.photo) {
             val img = getBufferedImageFromTelegramPhoto(photo.fileId)
             val category = detectImageService.detect(img)
-            if (category == ImageCategory.PORN || category == ImageCategory.SEXY) {
+            val resultSpam = spamAnalysis.isSpam(textExtractionService.extract(img))
+            if (category == ImageCategory.PORN
+                || category == ImageCategory.SEXY
+                || resultSpam.spam) {
                 val spam = Spam().apply {
-                    text = "Contains $category"
+                    text = if (resultSpam.spam) { resultSpam.text } else { "Изображение содержит $category" }
                     time = Timestamp(System.currentTimeMillis())
                     contact = userContact
                     chat = findChat(message)
@@ -246,7 +249,7 @@ class Receiver(
 
     private fun handlePotentialSpam(message: Message, chatStatistics: Chat) {
         val userContact = contactService.findIfNotCreate(message.from)
-        val spamReason = analysis.isSpam(message.text)
+        val spamReason = spamAnalysis.isSpam(message.text)
         contactService.increaseCountOfMessages(userContact, spamReason.spam)
         if (userContact.isHammer()) {
             return
