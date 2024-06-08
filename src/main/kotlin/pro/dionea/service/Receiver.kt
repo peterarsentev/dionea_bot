@@ -74,6 +74,7 @@ class Receiver(
         for (photo in message.photo) {
             val img = getBufferedImageFromTelegramPhoto(photo.fileId)
             val category = detectImageService.detect(img)
+            log.debug("Bot tries to extract the text from an image.")
             val textImg = textExtractionService.extract(img)
             log.debug("Image contains a text [$textImg]")
             val resultSpam = spamAnalysis.isSpam(textImg)
