@@ -13,7 +13,6 @@ class DetectImageService(@Value("\${model.dir}") modelDir: String) {
     private val model = SavedModelBundle.load(modelDir, "serve")
 
     fun detect(img: BufferedImage) : ImageCategory {
-        return ImageCategory.DRAWINGS
         val imageArray = bufferedImageTo4DArray(img)
         val inputTensor = Tensors.create(imageArray)
         val result = model.session().runner()
