@@ -10,25 +10,26 @@ import java.awt.image.BufferedImage
 
 @Service
 class DetectImageService(@Value("\${model.dir}") modelDir: String) {
-    private val model = SavedModelBundle.load(modelDir, "serve")
+//    private val model = SavedModelBundle.load(modelDir, "serve")
 
     fun detect(img: BufferedImage) : ImageCategory {
-        val imageArray = bufferedImageTo4DArray(img)
-        val inputTensor = Tensors.create(imageArray)
-        val result = model.session().runner()
-            .feed("serving_default_input", inputTensor) // Update tensor name
-            .fetch("StatefulPartitionedCall:0") // Update tensor name
-            .run()[0] as Tensor<*>
-        val probabilities = Array(1) { FloatArray(ImageCategory.entries.size) }
-        result.copyTo(probabilities)
-        result.close()
-        val maxIndex = probabilities[0].indices.maxByOrNull { probabilities[0][it] } ?: -1
-        return ImageCategory.entries[maxIndex]
+        return ImageCategory.DRAWINGS
+//        val imageArray = bufferedImageTo4DArray(img)
+//        val inputTensor = Tensors.create(imageArray)
+//        val result = model.session().runner()
+//            .feed("serving_default_input", inputTensor) // Update tensor name
+//            .fetch("StatefulPartitionedCall:0") // Update tensor name
+//            .run()[0] as Tensor<*>
+//        val probabilities = Array(1) { FloatArray(ImageCategory.entries.size) }
+//        result.copyTo(probabilities)
+//        result.close()
+//        val maxIndex = probabilities[0].indices.maxByOrNull { probabilities[0][it] } ?: -1
+//        return ImageCategory.entries[maxIndex]
     }
 
     @PreDestroy
     private fun destroy() {
-        model.close()
+//        model.close()
     }
 
     private fun bufferedImageTo4DArray(img: BufferedImage): Array<Array<Array<FloatArray>>> {
