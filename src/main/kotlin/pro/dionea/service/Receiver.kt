@@ -46,6 +46,7 @@ class Receiver(
     private val log = LoggerFactory.getLogger(Receiver::class.java)
 
     override fun onUpdateReceived(update: Update) {
+        log.debug("Bot gets message : {}", update)
         if (update.hasCallbackQuery()) {
             handleCallbackQuery(update)
             return
