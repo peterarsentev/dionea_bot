@@ -1,5 +1,6 @@
 package pro.dionea
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -10,8 +11,11 @@ import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import pro.dionea.service.*
 
+private val log = LoggerFactory.getLogger(Dionea::class.java)
+
 @SpringBootApplication
 class Dionea {
+
 	@Bean
 	fun encryptor() = BCryptPasswordEncoder()
 
@@ -32,5 +36,5 @@ fun main() {
 	val application = SpringApplication(Dionea::class.java)
 	application.addListeners(ApplicationPidFileWriter("./dionea.pid"))
 	application.run()
-	println("The application has started. Please go to http://localhost:8080/ to access it.")
+	log.debug("The application has started. Please go to http://localhost:8080/ to access it.")
 }
