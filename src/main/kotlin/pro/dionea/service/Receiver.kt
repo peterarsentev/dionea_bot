@@ -19,11 +19,9 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import pro.dionea.domain.*
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
-import java.io.IOException
 import java.net.URL
 import java.sql.Timestamp
 import javax.imageio.ImageIO
@@ -76,14 +74,14 @@ class Receiver(
         for (photo in message.photo) {
             val img = getBufferedImageFromTelegramPhoto(photo.fileId)
             val category = detectImageService.detect(img)
-            val textImg = textExtractionService.extract(img)
-            log.debug("Image contains a text [$textImg]")
-            val resultSpam = spamAnalysis.isSpam(textImg)
+//            val textImg = textExtractionService.extract(img)
+//            log.debug("Image contains a text [$textImg]")
+//            val resultSpam = spamAnalysis.isSpam(textImg)
             if (category == ImageCategory.PORN
                 || category == ImageCategory.SEXY
-                || resultSpam.spam) {
+                ) {
                 val spam = Spam().apply {
-                    text = if (resultSpam.spam) { resultSpam.text } else { "Изображение содержит $category" }
+                    text = "Изображение содержит $category"
                     time = Timestamp(System.currentTimeMillis())
                     contact = userContact
                     chat = findChat(message)
@@ -108,15 +106,18 @@ class Receiver(
         }
     }
 
-    @Throws(IOException::class, TelegramApiException::class)
-    private fun getBufferedImageFromTelegramPhoto(fileId: String): BufferedImage {
-        val getFileMethod = GetFile()
-        getFileMethod.fileId = fileId
-        val file = execute(getFileMethod)
-        val fileUrl = "https://api.telegram.org/file/bot" + getBotToken() + "/" + file.getFilePath()
-        val url = URL(fileUrl)
-        val bais = ByteArrayInputStream(url.openStream().readAllBytes())
-        return ImageIO.read(bais)
+    private fun getBufferedImageFromTelegramPhoto(flId: String): BufferedImage {
+        val file = execute(
+            GetFile().apply {
+                fileId = flId
+            }
+        )
+        URL("https://api.telegram.org/file/bot$token/${file.filePath}")
+            .openStream().use { io ->
+                return ImageIO.read(
+                    ByteArrayInputStream(io.readAllBytes())
+                )
+            }
     }
 
     private fun handleNewChatMembers(message: Message) {
