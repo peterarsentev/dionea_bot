@@ -3,6 +3,8 @@ package pro.dionea.service
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -26,7 +28,6 @@ import java.net.URL
 import java.sql.Timestamp
 import javax.imageio.ImageIO
 
-
 @Service
 class Receiver(
     @Value("\${tg.name}") val name: String,
@@ -41,6 +42,8 @@ class Receiver(
     val detectImageService: DetectImageService,
     val textExtractionService: TextExtractionService
 ) : TelegramLongPollingBot() {
+
+    private val log = LoggerFactory.getLogger(Receiver::class.java)
 
     override fun onUpdateReceived(update: Update) {
         if (update.hasCallbackQuery()) {
@@ -72,7 +75,9 @@ class Receiver(
         for (photo in message.photo) {
             val img = getBufferedImageFromTelegramPhoto(photo.fileId)
             val category = detectImageService.detect(img)
-            val resultSpam = spamAnalysis.isSpam(textExtractionService.extract(img))
+            val textImg = textExtractionService.extract(img)
+            log.debug("Image contains a text [$textImg]")
+            val resultSpam = spamAnalysis.isSpam(textImg)
             if (category == ImageCategory.PORN
                 || category == ImageCategory.SEXY
                 || resultSpam.spam) {
