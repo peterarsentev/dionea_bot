@@ -18,4 +18,4 @@ git rebase
 mvn clean package -DskipTests=true
 
 echo "run project"
-nohup java "-Dspring.config.location=file:./dionea.properties" -jar target/dionea-0.0.1.jar > /dev/null 2>&1&
+nohup java -Xms512m -Xmx1024m "-Dspring.config.location=file:./dionea.properties" -jar target/dionea-0.0.1.jar &
