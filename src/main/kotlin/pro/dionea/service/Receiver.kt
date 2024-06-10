@@ -59,11 +59,35 @@ class Receiver(
             return
         }
         when {
-            message.isMessageWithImage() -> handleRacyImageRequest(message)
+            message.isMessageWithImage() -> handleImageRequest(message)
             message.text == null -> return
             message.chat.type == "private" && message.text.startsWith("/") -> handlePrivateCommand(message)
             message.text.contains(name) && message.isReply -> handleSpamVoteRequest(message)
             else -> handlePotentialSpam(message, findChat(message))
+        }
+    }
+
+    private fun handleImageRequest(message: Message) {
+        val userContact = contactService.findIfNotCreate(message.from)
+        if (userContact.ham == 0) {
+            execute(DeleteMessage(message.chatId.toString(), message.messageId))
+            execute(RestrictChatMember().apply {
+                chatId = message.chatId.toString()
+                userId = message.from.id
+                permissions = ChatPermissions().apply {
+                    canSendMediaMessages = false
+                }
+            })
+            val msgInfo =  execute(SendMessage(
+                message.chatId.toString(),
+                "Здравствуйте, ${message.from.firstName}.\n" +
+                        "Мы ограничили вам доступ на отправку изображений. \n" +
+                        "Сообщение будет удалено через 10 секунд."
+            ))
+            GlobalScope.launch {
+                delay(10000)
+                execute(DeleteMessage(message.chatId.toString(), msgInfo.messageId))
+            }
         }
     }
 
