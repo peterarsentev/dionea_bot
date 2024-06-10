@@ -37,8 +37,6 @@ class Receiver(
     val encoding: PasswordEncoder,
     val contactService: ContactService,
     val chatService: ChatService,
-    val detectImageService: DetectImageService,
-    val textExtractionService: TextExtractionService
 ) : TelegramLongPollingBot() {
 
     private val log = LoggerFactory.getLogger(Receiver::class.java)
@@ -87,42 +85,6 @@ class Receiver(
             GlobalScope.launch {
                 delay(10000)
                 execute(DeleteMessage(message.chatId.toString(), msgInfo.messageId))
-            }
-        }
-    }
-
-    private fun handleRacyImageRequest(message: Message) {
-        val userContact = contactService.findIfNotCreate(message.from)
-        for (photo in message.photo) {
-            val img = getBufferedImageFromTelegramPhoto(photo.fileId)
-            val category = detectImageService.detect(img)
-            val textImg = textExtractionService.extract(img)
-            val resultSpam = spamAnalysis.isSpam(textImg)
-            if (category == ImageCategory.PORN
-                || category == ImageCategory.SEXY
-                || resultSpam.spam) {
-                val spam = Spam().apply {
-                    text = if (resultSpam.spam) { resultSpam.text } else { "Изображение содержит $category" }
-                    time = Timestamp(System.currentTimeMillis())
-                    contact = userContact
-                    chat = findChat(message)
-                }
-                spamService.add(spam)
-                val send = SendMessage(
-                    message.chatId.toString(),
-                    """
-                            Сообщение включает оскорбительное изображение. 
-                            Оно будет удалено через 10 секунд.
-                         """.trimIndent()
-                )
-                send.replyToMessageId = message.messageId
-                val infoMsg = execute(send)
-                GlobalScope.launch {
-                    delay(10000)
-                    execute(DeleteMessage(message.chatId.toString(), message.messageId))
-                    execute(DeleteMessage(message.chatId.toString(), infoMsg.messageId))
-                }
-                break
             }
         }
     }
