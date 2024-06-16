@@ -10,6 +10,8 @@ import pro.dionea.domain.Vote
 
 interface VoteRepository : CrudRepository<Vote, Int> {
 
+    fun findByChatIdAndMessageIdAndUserId(chatId: Long, messageId: Long, userId: Long): Vote?
+
     fun findByMessageId(messageId: Long): List<Vote>
 
     @Transactional

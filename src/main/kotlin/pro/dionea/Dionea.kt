@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
-import pro.dionea.service.*
+import pro.dionea.service.actions.Receiver
 
 private val log = LoggerFactory.getLogger(Dionea::class.java)
 

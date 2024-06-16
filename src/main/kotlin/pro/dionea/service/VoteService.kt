@@ -12,4 +12,7 @@ class VoteService(val voteRepository: VoteRepository) {
 
     fun findByMessageId(messageId: Long): List<Vote>
             = voteRepository.findByMessageId(messageId)
+
+    fun findByChatIdAndMessageIdAndUserId(chatId: Long, messageId: Long, userId: Long): Vote?
+            = voteRepository.findByChatIdAndMessageIdAndUserId(chatId, messageId, userId)
 }
