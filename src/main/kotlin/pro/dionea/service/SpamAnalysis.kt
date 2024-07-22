@@ -16,11 +16,16 @@ class SpamAnalysis(
     }
 
     fun isSpam(text: String): SpamReason {
-        if (text.length <= 50) {
+        if (text.length < 45) {
             return SpamReason(false, "Сообщение короткое.")
         }
-        if (EmojiParser.extractEmojis(text).size >= 3) {
+        val emojis = EmojiParser.extractEmojis(text)
+        if (emojis.size >= 3) {
             return SpamReason(true, "Содержит более 3 эмоджи.")
+        }
+        val contactPattern = "@\\w+".toRegex()
+        if (emojis.isNotEmpty() && contactPattern.containsMatchIn(text)) {
+            return SpamReason(true, "Содержит эмодзи и контактный логин.")
         }
         val lang = IdentifyLang(text).lang()
         val converted = ConvertedLetter()

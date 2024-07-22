@@ -383,4 +383,42 @@ class SpamAnalysisTest {
         val text = "Я бесплатно за нищие вероятные 500к такую хуйню делать не буду"
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isFalse()
     }
+
+    @Test
+    fun isSpam28() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "кайф"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "бесплатно"))
+        val text = "\uD83D\uDC8B  П р о б е й     з н а к о м у ю     н а      и н т и м к и \n" +
+                "\n" +
+                "@nmw999"
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
+    }
+
+    @Test
+    fun isSpam29() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "кайф"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "бесплатно"))
+        val text = "\uD83D\uDE18 пᴘоҕᴇй дᴇвʏωкʏ нᴀ нᴀличиᴇ интимок\n" +
+                "\n" +
+                "@Nmw999"
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
+    }
 }
