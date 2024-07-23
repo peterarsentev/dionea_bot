@@ -7,6 +7,5 @@ class EmptyMessageAction: UpdateAction {
             = !update.hasMessage()
 
     override fun execute(update: Update, remoteChat: RemoteChat) {
-        TODO("Not yet implemented")
     }
 }
