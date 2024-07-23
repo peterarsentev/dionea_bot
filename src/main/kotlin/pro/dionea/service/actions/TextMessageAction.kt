@@ -16,12 +16,11 @@ import java.sql.Timestamp
 class TextMessageAction(val contactService: ContactService,
                         val spamService: SpamService,
                         val spamAnalysis: SpamAnalysis,
-                        val chatService: ChatService,
-                        val remoteChat: RemoteChat): UpdateAction {
+                        val chatService: ChatService): UpdateAction {
     override fun check(update: Update): Boolean
             = update.message.text.isNullOrEmpty()
 
-    override fun execute(update: Update) {
+    override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message
         val chatStatistics = chatService.findOrCreate(message)
         val userContact = contactService.findIfNotCreate(message.from)

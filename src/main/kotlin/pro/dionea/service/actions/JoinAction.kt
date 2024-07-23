@@ -11,14 +11,12 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import pro.dionea.service.ContactService
 
 class JoinAction(
-    val contactService: ContactService,
-    val remoteChat: RemoteChat
-): UpdateAction {
+    val contactService: ContactService): UpdateAction {
 
     override fun check(update: Update): Boolean
             = update.message.newChatMembers.isNotEmpty()
 
-    override fun execute(update: Update) {
+    override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message
         val newMembers = message.newChatMembers
         for (member in newMembers) {

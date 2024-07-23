@@ -5,12 +5,12 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
-class ReplyAction(val remoteChat: RemoteChat, val botName: String): UpdateAction {
+class ReplyAction(val botName: String): UpdateAction {
 
     override fun check(update: Update): Boolean
      = update.message.text.contains(botName) && update.message.isReply
 
-    override fun execute(update: Update) {
+    override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message
         val voteMessage = SendMessage().apply {
             chatId = message.chatId.toString()

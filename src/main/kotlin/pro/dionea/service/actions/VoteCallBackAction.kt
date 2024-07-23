@@ -15,14 +15,12 @@ class VoteCallBackAction(
     val voteService: VoteService,
     val contactService: ContactService,
     val spamService: SpamService,
-    val chatService: ChatService,
-    val remoteChat: RemoteChat
-) : UpdateAction {
+    val chatService: ChatService) : UpdateAction {
 
     override fun check(update: Update): Boolean
             = update.hasCallbackQuery()
 
-    override fun execute(update: Update) {
+    override fun execute(update: Update, remoteChat: RemoteChat) {
         val spamMessage = update.callbackQuery.message.replyToMessage ?: return
         val chtId = spamMessage.chat.id
         val replyMessage = update.callbackQuery.message
@@ -64,7 +62,7 @@ class VoteCallBackAction(
         updateVote.replyMarkup = markupInline
         remoteChat.execute(updateVote)
         if (votesYes >= Receiver.VOTE_SIZE_YES) {
-            deleteByVoteMessage(spamMessage, replyMessage, callBotMessageId)
+            deleteByVoteMessage(spamMessage, replyMessage, callBotMessageId, remoteChat)
         }
         if (votesNo >= Receiver.VOTE_SIZE_NO) {
             remoteChat.execute(DeleteMessage(chtId.toString(), replyMessage.messageId))
@@ -72,7 +70,8 @@ class VoteCallBackAction(
         }
     }
 
-    private fun deleteByVoteMessage(spamMessage: Message, replyMessage: Message, callBotMessageId: Int) {
+    private fun deleteByVoteMessage(spamMessage: Message, replyMessage: Message,
+                                    callBotMessageId: Int, remoteChat: RemoteChat) {
         val chtId = spamMessage.chatId.toString()
         val spammer = contactService.findIfNotCreate(spamMessage.from)
         contactService.increaseCountOfMessages(spammer, true)

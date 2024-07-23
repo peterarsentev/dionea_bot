@@ -20,7 +20,7 @@ class Receiver(
     override fun onUpdateReceived(update: Update) {
         for (action in actions) {
             if (action.check(update)) {
-                action.execute(update)
+                action.execute(update, this)
                 return
             }
         }

@@ -1,5 +1,6 @@
 package pro.dionea.service.actions
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -13,19 +14,19 @@ class ActionConfig(
     private val chatService: ChatService,
     private val userService: UserService,
     private val encoding: PasswordEncoder,
-    private val spamAnalysis: SpamAnalysis,
+    private val spamAnalysis: SpamAnalysis
 ) {
 
     @Bean
-    fun actions(remoteChat: RemoteChat, botUsername: String): List<UpdateAction> {
+    fun actions(@Value("\${tg.name}") botUsername: String): List<UpdateAction> {
         return listOf(
-            VoteCallBackAction(voteService, contactService, spamService, chatService, remoteChat),
+            VoteCallBackAction(voteService, contactService, spamService, chatService),
             EmptyMessageAction(),
-            JoinAction(contactService, remoteChat),
-            ImageAttachedAction(contactService, remoteChat),
-            PrivateChatAction(userService, encoding, remoteChat),
-            ReplyAction(remoteChat, botUsername),
-            TextMessageAction(contactService, spamService, spamAnalysis, chatService, remoteChat)
+            JoinAction(contactService),
+            ImageAttachedAction(contactService),
+            PrivateChatAction(userService, encoding),
+            ReplyAction(botUsername),
+            TextMessageAction(contactService, spamService, spamAnalysis, chatService)
         )
     }
 }

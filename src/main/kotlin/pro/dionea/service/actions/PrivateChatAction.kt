@@ -8,13 +8,12 @@ import pro.dionea.service.KeyGen
 import pro.dionea.service.UserService
 
 class PrivateChatAction(val userService: UserService,
-                        val encoding: PasswordEncoder,
-                        val remoteChat: RemoteChat) : UpdateAction {
+                        val encoding: PasswordEncoder) : UpdateAction {
 
     override fun check(update: Update): Boolean
             = update.message.chat.type == "private" && update.message.text.startsWith("/")
 
-    override fun execute(update: Update) {
+    override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message
         if (message.text.startsWith("/")) {
             if ("/start" == message.text) {

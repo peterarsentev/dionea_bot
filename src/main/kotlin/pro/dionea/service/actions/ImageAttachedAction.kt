@@ -3,27 +3,21 @@ package pro.dionea.service.actions
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.telegram.telegrambots.meta.api.methods.GetFile
 import org.telegram.telegrambots.meta.api.methods.groupadministration.RestrictChatMember
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.ChatPermissions
 import org.telegram.telegrambots.meta.api.objects.Update
 import pro.dionea.service.ContactService
-import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
-import java.net.URL
-import javax.imageio.ImageIO
 
-class ImageAttachedAction(val contactService: ContactService,
-    val remoteChat: RemoteChat): UpdateAction {
+class ImageAttachedAction(val contactService: ContactService): UpdateAction {
 
     override fun check(update: Update): Boolean {
         val photo = update.message.photo
         return photo != null && photo.isNotEmpty()
     }
 
-    override fun execute(update: Update) {
+    override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message
         val userContact = contactService.findIfNotCreate(message.from)
         if (userContact.ham == 0) {
