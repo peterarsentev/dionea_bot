@@ -18,7 +18,7 @@ class ReplyActionTest {
     @BeforeEach
     fun setUp() {
         remoteChat = RemoteChatFake()
-        replyAction = ReplyAction(remoteChat, botName)
+        replyAction = ReplyAction(botName)
     }
 
     @Test
@@ -38,7 +38,7 @@ class ReplyActionTest {
     @Test
     fun `when execute then send message with correct properties`() {
         val update = createUpdate(botName, true)
-        replyAction.execute(update)
+        replyAction.execute(update, remoteChat)
         val messages = remoteChat.getMessages()
         assertThat(messages).hasSize(1)
         val sendMessage = messages[0] as SendMessage
