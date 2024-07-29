@@ -11,7 +11,7 @@ class ConvertedLetterTest {
                 "                \"без oпытa, нет влoжений. Нужнo выпoлнять не слoжные зaдaния в бoте в TG\\n\" +\n" +
                 "                \"\\n\" +\n" +
                 "                \"Узнaть детaли: нaйдите в пoиске rabota_382"
-        val (word, size) = ConvertedLetter().englishToRussian(text)
+        val (_, size) = ConvertedLetter().englishToRussian(text)
         assertThat(size).isEqualTo(30)
     }
 

@@ -18,7 +18,7 @@ class TextMessageAction(val contactService: ContactService,
                         val spamAnalysis: SpamAnalysis,
                         val chatService: ChatService): UpdateAction {
     override fun check(update: Update): Boolean
-            = update.message.text.isNullOrEmpty()
+            = update.message.text.isNotEmpty()
 
     override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message

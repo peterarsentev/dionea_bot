@@ -21,7 +21,7 @@ class ChatService(val chatRepository: ChatRepository) {
         ?: add(
             Chat().apply {
                 chatId = message.chatId
-                username = message.chat.userName
+                username = message.from.firstName
                 title = message.chat.title
             }
         )
