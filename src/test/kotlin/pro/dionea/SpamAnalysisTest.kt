@@ -421,4 +421,45 @@ class SpamAnalysisTest {
                 "@Nmw999"
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
+
+    @Test
+    fun isSpam30() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "кайф"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "бесплатно"))
+        val text = "@Nmw999 пᴘоҕᴇй дᴇвʏωкʏ нᴀ нᴀличиᴇ интимок @Nmw999"
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
+    }
+
+    @Test
+    fun isSpam31() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "кайф"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "бесплатно"))
+        val text = "\uD83C\uDDF7\uD83C\uDDFAТРЕБУЮТСЯ РЕБЯТА|МУЖЧИНЫ-ЖЕНЩИНЫ ДЛЯ РАБОТЫ ОНЛАЙН\n" +
+                "возраст 18+❗\uFE0F (не продажи, не валюта)\n" +
+                "\n" +
+                "➤Оплата достойная\n" +
+                "➤Можно как подработка (совмещение)\n" +
+                "➤Без опыта\n" +
+                "\n" +
+                "По вопросам  + Переходите сюда (https://telegra.ph/Kontakt-dlya-svyazi-08-08) !"
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
+    }
 }

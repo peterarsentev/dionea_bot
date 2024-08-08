@@ -38,9 +38,7 @@ class TextMessageAction(val contactService: ContactService,
             }
             spamService.add(spam)
             val send = SendMessage(
-                message.chatId.toString(), "Обнаружен спам:\n" +
-                        "${spamReason.text}\n" +
-                        "Сообщение будет удалено через 10 секунд."
+                message.chatId.toString(), "Обнаружен спам"
             )
             send.replyToMessageId = message.messageId
             val infoMsg = remoteChat.execute(send)

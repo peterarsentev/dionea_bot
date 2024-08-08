@@ -3,7 +3,8 @@ package pro.dionea.service
 import com.vdurmont.emoji.EmojiParser
 import org.springframework.stereotype.Service
 import pro.dionea.dto.SpamReason
-import java.lang.StringBuilder
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 @Service
 class SpamAnalysis(
@@ -12,6 +13,7 @@ class SpamAnalysis(
     val kvalueService: KValueService) {
 
     companion object {
+        val CONTACT_PATTERN = Pattern.compile("@\\w+")
         const val CONVERTED_LETTERS = 20
     }
 
@@ -23,8 +25,11 @@ class SpamAnalysis(
         if (emojis.size >= 3) {
             return SpamReason(true, "Содержит более 3 эмоджи.")
         }
-        val contactPattern = "@\\w+".toRegex()
-        if (emojis.isNotEmpty() && contactPattern.containsMatchIn(text)) {
+        val count = CONTACT_PATTERN.matcher(text).results().count()
+        if (count > 1) {
+            return SpamReason(true, "Содержит множественные контактные данные.")
+        }
+        if (emojis.isNotEmpty() && count > 0) {
             return SpamReason(true, "Содержит эмодзи и контактный логин.")
         }
         val lang = IdentifyLang(text).lang()
