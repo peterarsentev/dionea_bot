@@ -8,7 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 class ReplyAction(val botName: String): UpdateAction {
 
     override fun check(update: Update): Boolean
-     = update.message.text.contains(botName) && update.message.isReply
+     = update.message.text != null
+            && update.message.text.contains(botName)
+            && update.message.isReply
 
     override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message
