@@ -37,14 +37,14 @@ class TextMessageAction(val contactService: ContactService,
                 chat = chatStatistics
             }
             spamService.add(spam)
+            remoteChat.execute(DeleteMessage(message.chatId.toString(), message.messageId))
             val send = SendMessage(
-                message.chatId.toString(), "Обнаружен спам"
+                message.chatId.toString(), "Обнаружен спам от пользователя: ${userContact.firstName}"
             )
             send.replyToMessageId = message.messageId
             val infoMsg = remoteChat.execute(send)
             GlobalScope.launch {
                 delay(10000)
-                remoteChat.execute(DeleteMessage(message.chatId.toString(), message.messageId))
                 remoteChat.execute(DeleteMessage(message.chatId.toString(), infoMsg.messageId))
             }
         }
