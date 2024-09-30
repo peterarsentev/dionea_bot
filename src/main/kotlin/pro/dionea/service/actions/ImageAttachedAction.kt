@@ -26,7 +26,7 @@ class ImageAttachedAction(val contactService: ContactService): UpdateAction {
                 chatId = message.chatId.toString()
                 userId = message.from.id
                 permissions = ChatPermissions().apply {
-                    canSendMediaMessages = false
+                    canSendMessages = true
                 }
             })
             val msgInfo = remoteChat.execute(

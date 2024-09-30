@@ -47,6 +47,7 @@ class JoinAction(
                 GlobalScope.launch {
                     delay(10000)
                     remoteChat.execute(DeleteMessage(message.chatId.toString(), msgInfo.messageId))
+                    remoteChat.execute(DeleteMessage(message.chatId.toString(), message.messageId))
                 }
             }
         }

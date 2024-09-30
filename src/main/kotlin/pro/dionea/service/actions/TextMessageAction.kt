@@ -3,6 +3,7 @@ package pro.dionea.service.actions
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -41,11 +42,25 @@ class TextMessageAction(val contactService: ContactService,
             val send = SendMessage(
                 message.chatId.toString(), "Обнаружен спам от пользователя: ${userContact.firstName}"
             )
-            send.replyToMessageId = message.messageId
             val infoMsg = remoteChat.execute(send)
             GlobalScope.launch {
                 delay(10000)
                 remoteChat.execute(DeleteMessage(message.chatId.toString(), infoMsg.messageId))
+            }
+            if (contactService.shouldBeBanned(userContact.tgUserId)) {
+                remoteChat.execute(BanChatMember().apply {
+                    chatId = message.chatId.toString()
+                    userId = message.from.id
+                })
+                val banMsg = SendMessage(
+                    message.chatId.toString(),
+                    "Пользователь ${userContact.firstName} был забанен за спам."
+                )
+                val banInfoMsg = remoteChat.execute(banMsg)
+                GlobalScope.launch {
+                    delay(10000)
+                    remoteChat.execute(DeleteMessage(message.chatId.toString(), banInfoMsg.messageId))
+                }
             }
         }
     }

@@ -32,4 +32,9 @@ class ContactService(val contactRepository: ContactRepository) {
 
     fun findByTgUserId(tgUserId: Long): Contact?
             = contactRepository.findByTgUserId(tgUserId)
+
+    fun shouldBeBanned(tgUserId: Long): Boolean {
+        val contact = findByTgUserId(tgUserId) ?: return false
+        return contact.spam - contact.ham > 3
+    }
 }
