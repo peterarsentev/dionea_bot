@@ -39,28 +39,28 @@ class TextMessageAction(val contactService: ContactService,
             }
             spamService.add(spam)
             remoteChat.execute(DeleteMessage(message.chatId.toString(), message.messageId))
-            val send = SendMessage(
-                message.chatId.toString(), "Обнаружен спам от пользователя: ${userContact.firstName}"
-            )
-            val infoMsg = remoteChat.execute(send)
-            GlobalScope.launch {
-                delay(10000)
-                remoteChat.execute(DeleteMessage(message.chatId.toString(), infoMsg.messageId))
-            }
+//            val send = SendMessage(
+//                message.chatId.toString(), "Обнаружен спам от пользователя: ${userContact.firstName}"
+//            )
+//            val infoMsg = remoteChat.execute(send)
+//            GlobalScope.launch {
+//                delay(10000)
+//                remoteChat.execute(DeleteMessage(message.chatId.toString(), infoMsg.messageId))
+//            }
             if (contactService.shouldBeBanned(userContact.tgUserId)) {
                 remoteChat.execute(BanChatMember().apply {
                     chatId = message.chatId.toString()
                     userId = message.from.id
                 })
-                val banMsg = SendMessage(
-                    message.chatId.toString(),
-                    "Пользователь ${userContact.firstName} был забанен за спам."
-                )
-                val banInfoMsg = remoteChat.execute(banMsg)
-                GlobalScope.launch {
-                    delay(10000)
-                    remoteChat.execute(DeleteMessage(message.chatId.toString(), banInfoMsg.messageId))
-                }
+//                val banMsg = SendMessage(
+//                    message.chatId.toString(),
+//                    "Пользователь ${userContact.firstName} был забанен за спам."
+//                )
+//                val banInfoMsg = remoteChat.execute(banMsg)
+//                GlobalScope.launch {
+//                    delay(10000)
+//                    remoteChat.execute(DeleteMessage(message.chatId.toString(), banInfoMsg.messageId))
+//                }
             }
         }
     }

@@ -462,4 +462,33 @@ class SpamAnalysisTest {
                 "По вопросам  + Переходите сюда (https://telegra.ph/Kontakt-dlya-svyazi-08-08) !"
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
+
+    @Test
+    fun isSpam32() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val filter = filterRepository.save(Filter(1))
+        val keyJob = keyRepository.save(Key(1, filter))
+        kvalueRepository.save(KValue(1, keyJob, "сфера"))
+        val keyMessage = keyRepository.save(Key(2, filter))
+        kvalueRepository.save(KValue(2, keyMessage, "поиск"))
+        val text = "Добрый день! В поиске людей. Удаленная сфера занятости,подойдет каждому. За дополнительной информацией пишите в личку"
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
+    }
+
+    @Test
+    fun whenContainEmojiAndContact() {
+        val filterRepository = FilterFakeRepository()
+        val filterService = FilterService(filterRepository)
+        val keyRepository = KeyFakeRepository()
+        val keyService = KeyService(keyRepository)
+        val kvalueRepository = KValueFakeRepository()
+        val kvalueService = KValueService(kvalueRepository)
+        val text = "ХОРОШЕЕ НАСТРОЕНИЕ тут \uD83C\uDF40\uD83C\uDF31 @omgomgsh";
+        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
+    }
 }

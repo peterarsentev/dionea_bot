@@ -14,11 +14,12 @@ class SpamAnalysis(
 
     companion object {
         val CONTACT_PATTERN = Pattern.compile("@\\w+")
+        const val MIN_SIZE_OF_MESSAGE = 35
         const val CONVERTED_LETTERS = 20
     }
 
     fun isSpam(text: String): SpamReason {
-        if (text.length < 45) {
+        if (text.length < MIN_SIZE_OF_MESSAGE) {
             return SpamReason(false, "Сообщение короткое.")
         }
         val emojis = EmojiParser.extractEmojis(text)
