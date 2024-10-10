@@ -1,16 +1,17 @@
 package pro.dionea.service
 
-class IdentifyLang(val text: String) {
+class IdentifyLang(val lex: Set<String>) {
     private val englishRange = 'a' .. 'z'
     private val russianRange = 'а'.. 'я'
 
     enum class Lang {
-        RUS, ENG, UNKNOWN
+        RUS, ENG
     }
 
-    private fun String.countBy(range: CharRange) = this.count { it in range }
+    private fun Set<String>.countBy(range: CharRange): Int =
+        this.count { word -> word.any { it in range } }
 
-    fun lang() : Lang = if (text.countBy(englishRange) >= text.countBy(russianRange)) {
+    fun lang() : Lang = if (lex.countBy(englishRange) >= lex.countBy(russianRange)) {
         Lang.ENG
     } else {
         Lang.RUS

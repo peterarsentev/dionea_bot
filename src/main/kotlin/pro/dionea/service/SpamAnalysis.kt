@@ -3,7 +3,6 @@ package pro.dionea.service
 import com.vdurmont.emoji.EmojiParser
 import org.springframework.stereotype.Service
 import pro.dionea.dto.SpamReason
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 @Service
@@ -33,15 +32,15 @@ class SpamAnalysis(
         if (emojis.isNotEmpty() && count > 0) {
             return SpamReason(true, "Содержит эмодзи и контактный логин.")
         }
-        val lang = IdentifyLang(text).lang()
         val converted = ConvertedLetter()
         val lex = EmojiParser.removeAllEmojis(text)
-            .replace("[.,+~?!:;(){}\n]".toRegex(), " ")
+            .replace("[.,+~?!:;(){}\n/]".toRegex(), " ")
             .split("\\s+".toRegex())
             .asSequence()
             .filter { it.length > 2 }
             .map { it.lowercase() }
             .toSet()
+        val lang = IdentifyLang(lex).lang()
         val words =
             if (lang == IdentifyLang.Lang.RUS) {
                val convertedLetter = converted.englishToRussian(lex)
