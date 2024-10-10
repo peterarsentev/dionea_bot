@@ -26,7 +26,8 @@
         <div class="container">
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link active" th:href="@{./../index}">Главная</a>
+                    <a class="nav-item nav-link" th:href="@{./../index}">Главная</a>
+                    <a class="nav-item nav-link active" th:href="@{./../filters/}">Стоп-фильтры</a>
                     <a class="nav-item nav-link" th:href="@{./../spams/view}">База спама</a>
                     <a class="nav-item nav-link" th:href="@{./../login}">Войти</a>
                 </div>
@@ -39,7 +40,7 @@
                 <div class="card">
                     <h5 class="card-header">Стоп-фильтры</h5>
                     <div class="card-body">
-                        <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{./../filter/create}">Add filter</a>
+<!--                        <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{./../filter/create}">Add filter</a>-->
                         <table class="table">
                             <tbody>
                             <tr th:each="filter: ${filters}">

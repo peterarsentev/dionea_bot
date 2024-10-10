@@ -26,10 +26,10 @@
         <div class="container">
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link active" th:href="@{./index}">Main</a>
-                    <a sec:authorize="isAuthenticated()" class="nav-item nav-link" th:href="@{./filter/create}">Add filter</a>
-                    <a class="nav-item nav-link" th:href="@{./spams/view}">Spam</a>
-                    <a class="nav-item nav-link" th:href="@{./login}">Login</a>
+                    <a class="nav-item nav-link" th:href="@{./index}">Главная</a>
+                    <a class="nav-item nav-link" th:href="@{./filters/}">Стоп-фильтры</a>
+                    <a class="nav-item nav-link" th:href="@{./spams/view}">База спама</a>
+                    <a class="nav-item nav-link active" th:href="@{./login}">Войти</a>
                 </div>
             </div>
         </div>
