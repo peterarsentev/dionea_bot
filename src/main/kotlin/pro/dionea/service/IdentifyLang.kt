@@ -21,14 +21,11 @@ class IdentifyLang(private val lex: Set<String>) {
     private fun String.lang() : Lang {
         val rus = count { it in russianRange }
         val eng = count { it in englishRange }
-        return if (rus != 0 && eng != 0) {
-            Lang.MIXED
-        } else if (rus != 0) {
-            Lang.RUS
-        } else if (eng != 0) {
-            Lang.ENG
-        } else {
-            Lang.UNDEFINED
+        return when {
+            rus != 0 && eng != 0 -> Lang.MIXED
+            rus != 0 -> Lang.RUS
+            eng != 0 -> Lang.ENG
+            else -> Lang.UNDEFINED
         }
 }
 

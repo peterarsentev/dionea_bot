@@ -1,10 +1,6 @@
 package pro.dionea.service.actions
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import pro.dionea.domain.Spam
@@ -19,7 +15,7 @@ class TextMessageAction(val contactService: ContactService,
                         val spamAnalysis: SpamAnalysis,
                         val chatService: ChatService): UpdateAction {
     override fun check(update: Update): Boolean
-            = update.message.text.isNotEmpty()
+            = update.message.text != null && update.message.text.isNotEmpty()
 
     override fun execute(update: Update, remoteChat: RemoteChat) {
         val message = update.message

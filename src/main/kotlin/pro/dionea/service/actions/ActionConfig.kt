@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import pro.dionea.service.*
 
 @Configuration
+@Suppress("unused")
 class ActionConfig(
     private val voteService: VoteService,
     private val contactService: ContactService,
@@ -26,6 +27,7 @@ class ActionConfig(
             ImageAttachedAction(contactService),
             PrivateChatAction(userService, encoding),
             ReplyAction(botUsername),
+            MentionBotAction(botUsername),
             TextMessageAction(contactService, spamService, spamAnalysis, chatService)
         )
     }
