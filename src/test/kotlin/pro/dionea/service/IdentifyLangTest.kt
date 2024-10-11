@@ -8,7 +8,7 @@ class IdentifyLangTest {
     fun whenTextRussia() {
         assertThat(
             IdentifyLang(
-                setOf("Писать")
+                setOf("писать")
             ).lang()
         ).isEqualTo(IdentifyLang.Lang.RUS)
     }
@@ -17,8 +17,15 @@ class IdentifyLangTest {
     fun whenMessageContainsNumber() {
         assertThat(
             IdentifyLang(
-                setOf("Писать", "1234567890")
+                setOf("писать", "1234567890")
             ).lang()
         ).isEqualTo(IdentifyLang.Lang.RUS)
+    }
+
+    @Test
+    fun whenMessageContainsMix() {
+        val lex = setOf("дохoд", "пuсать")
+        val size = IdentifyLang(lex).sizeByLang()
+        assertThat(size[IdentifyLang.Lang.RUS]).isEqualTo(9)
     }
 }

@@ -14,7 +14,6 @@ class SpamAnalysis(
     companion object {
         val CONTACT_PATTERN = Pattern.compile("@\\w+")
         const val MIN_SIZE_OF_MESSAGE = 35
-        const val CONVERTED_LETTERS = 20
     }
 
     fun isSpam(text: String): SpamReason {
@@ -32,7 +31,6 @@ class SpamAnalysis(
         if (emojis.isNotEmpty() && count > 0) {
             return SpamReason(true, "Содержит эмодзи и контактный логин.")
         }
-        val converted = ConvertedLetter()
         val lex = EmojiParser.removeAllEmojis(text)
             .replace("[.,+~?!:;(){}\n/]".toRegex(), " ")
             .split("\\s+".toRegex())
@@ -41,17 +39,9 @@ class SpamAnalysis(
             .map { it.lowercase() }
             .toSet()
         val lang = IdentifyLang(lex).lang()
-        val words =
-            if (lang == IdentifyLang.Lang.RUS) {
-               val convertedLetter = converted.englishToRussian(lex)
-                if (convertedLetter.second >= CONVERTED_LETTERS) {
-                    return SpamReason(true, "Русские буквы заменены на английские.")
-                } else {
-                    convertedLetter.first
-                }
-            } else {
-                lex
-            }
+        if (lang == IdentifyLang.Lang.MIXED) {
+            return SpamReason(true, "Русские буквы заменены на английские.")
+        }
 
         val filters = filterService.getAll()
         val fkeys = keyService.getAll().groupBy { it.filter.id }
@@ -62,7 +52,7 @@ class SpamAnalysis(
             var matched = 0
             for (key in keys) {
                 val baseWords = kvalues.get(key.id)!!.map { it.value }.toList()
-                val coincidences = words.containsAny(baseWords)
+                val coincidences = lex.containsAny(baseWords)
                 if (coincidences.size >= 3) {
                     return SpamReason(true,
                         "Стоп-фильтр \"${filter.name}\": ${coincidences.joinToString(", ")}\n")
