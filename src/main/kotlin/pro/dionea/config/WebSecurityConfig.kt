@@ -37,7 +37,7 @@ class WebSecurityConfig(val dataSource: DataSource) {
     }
 
     @Bean
-    fun user(encoder: PasswordEncoder): UserDetailsManager {
+    fun user(): UserDetailsManager {
         val jdbcUserDetailsManager = JdbcUserDetailsManager(dataSource)
         jdbcUserDetailsManager.usersByUsernameQuery = """
             SELECT u.username, u.password, u.enabled FROM dionea_user u 

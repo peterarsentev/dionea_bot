@@ -1,8 +1,9 @@
 plugins {
     id("org.springframework.boot") version "3.3.5"
-    kotlin("jvm") version "1.9.23"
-    kotlin("plugin.spring") version "1.9.23"
-    kotlin("plugin.jpa") version "1.9.23"
+    kotlin("jvm") version "1.8.21"
+    kotlin("plugin.spring") version "1.8.21"
+    kotlin("plugin.jpa") version "1.8.21"
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
 }
 apply(plugin = "io.spring.dependency-management")
 
