@@ -7,15 +7,12 @@ fi
 
 export JAVA_HOME=/root/jdk-18.0.1.1
 
-export M2_HOME=/root/apache-maven-3.8.6
-
-export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+export PATH=$JAVA_HOME/bin:$PATH
 
 git fetch
 
 git rebase
 
-mvn clean package -DskipTests=true
+./gradlew bootJar
 
-echo "run project"
-nohup java "-Dspring.config.location=file:./dionea.properties" -jar target/dionea-0.0.1.jar &
+nohup java "-Dspring.config.location=file:./dionea.properties" -jar build/libs/dionea-0.0.1.jar &
