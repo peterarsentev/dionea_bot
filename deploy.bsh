@@ -5,7 +5,7 @@ if test -f "dionea.pid"; then
     kill -9 $(cat dionea.pid)
 fi
 
-export JAVA_HOME=/root/jdk-18.0.1.1
+export JAVA_HOME=/root/jdk-21.0.3
 
 export PATH=$JAVA_HOME/bin:$PATH
 

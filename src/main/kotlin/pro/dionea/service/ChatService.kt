@@ -22,7 +22,7 @@ class ChatService(val chatRepository: ChatRepository) {
             Chat().apply {
                 chatId = message.chatId
                 username = message.from.firstName
-                title = message.chat.title
+                title = message.chat.title ?: "untitled"
             }
         )
 }

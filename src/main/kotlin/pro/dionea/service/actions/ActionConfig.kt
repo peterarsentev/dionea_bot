@@ -25,6 +25,7 @@ class ActionConfig(
             EmptyMessageAction(),
             JoinAction(contactService),
             ImageAttachedAction(contactService),
+            KeyboardMarkUpAction(contactService),
             PrivateChatAction(userService, encoding),
             ReplyAction(botUsername),
             MentionBotAction(botUsername),
