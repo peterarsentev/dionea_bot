@@ -14,7 +14,6 @@ import pro.dionea.service.KValueService
 import pro.dionea.service.KeyService
 import pro.dionea.service.SpamAnalysis
 
-@Disabled
 class SpamAnalysisTest {
 
     @Test
@@ -37,6 +36,7 @@ class SpamAnalysisTest {
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam2() {
         val text = "Зaрaбoтoк oт нескoльких тысяч рублей кaждый день. Рaбoтa удaлённo, легaльнo, " +
@@ -47,6 +47,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam3() {
         val text = "\uD83D\uDE80Готов поднимать 100-200 \$ каждый день?\n" +
@@ -62,6 +63,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam4() {
         val text = "Приглашаю желающих освоить возможности хорошего дополнительного заработка на удаленке. " +
@@ -70,6 +72,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam5() {
         val text = "\uD83D\uDC4BПредлагаю возможность стабильного и удалённого зароботка!\n" +
@@ -83,6 +86,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam6() {
         val text = "Здравствуйте. \n" +
@@ -93,6 +97,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam7() {
         val text = "НУЖНЫ ЛЮДИ ДЛЯ УДАЛЕННОЙ РАБОТЫ\n" +
@@ -104,6 +109,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam8() {
         val text = "Добрый день. Извиняюсь что не по теме, может кто то трейдингом занимается? " +
@@ -113,6 +119,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam9() {
         val text = "Ищу людей, возьму 2-3 человека 18+ \n" +
@@ -123,6 +130,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam10() {
         val text = "Готов обучить aрбитражу \n" +
@@ -136,6 +144,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam11() {
         val text = "\uD83D\uDCF2 Рaбoтa - oт 5 тыс. р ежедневнo. Рaбoтa пo интернет, " +
@@ -147,6 +156,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam12() {
         val text = "\uD83D\uDCA5 Пoдрaбoткa oт нескoльких тысяч рублей ежедневнo. " +
@@ -158,6 +168,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam13() {
         val text = "В поиске людей, заинтересованных в получении " +
@@ -166,6 +177,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam14() {
         val text = "⁉\uFE0F Ищeте заработок? Работайте прямо в Telegram!\n" +
@@ -182,6 +194,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam15() {
         val text = "‼\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F\uD83C\uDD71\uFE0F‼\uFE0F\n" +
@@ -193,6 +206,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam16() {
         val text = "В поиске людей, заинтересованных в получении дополнительной прибыли на удаленке. " +
@@ -201,6 +215,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam17() {
         val text = "ЕСТЬ ЖЕЛАНИЕ ОБУЧИТЬСЯ ПОДНИМАТЬ ЛАВЕ ОНЛАЙН?\uD83D\uDED1\n" +
@@ -215,6 +230,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam18() {
         val text = "Добрый день, ищем ответственного человека для сотрудничества, в ЛС"
@@ -222,6 +238,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam19() {
         val text = "Ищем партнеров для пассивного заработка❗\uFE0F\n" +
@@ -235,6 +252,7 @@ class SpamAnalysisTest {
 //        assertThat(SpamAnalysis().isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam20() {
 //        val filterRepository = FilterFakeRepository()
@@ -333,6 +351,7 @@ class SpamAnalysisTest {
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam25() {
         val filterRepository = FilterFakeRepository()
@@ -345,11 +364,18 @@ class SpamAnalysisTest {
         val keyJob = keyRepository.save(Key(1, filter))
         kvalueRepository.save(KValue(1, keyJob, "проект"))
         val keyMessage = keyRepository.save(Key(2, filter))
-        kvalueRepository.save(KValue(2, keyMessage, "лс"))
+        kvalueRepository.save(KValue(2, keyMessage, "удалённой"))
         val text = "Здравствуйте, нужны люди, стремительно развивающий проект, на удалённой основе + в ЛС\uD83D\uDD25\uD83C\uDFE0"
-        assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
+        assertThat(
+            SpamAnalysis(
+                filterService,
+                keyService,
+                kvalueService)
+                .isSpam(text).spam)
+            .isTrue()
     }
 
+    @Disabled
     @Test
     fun isSpam26() {
         val filterRepository = FilterFakeRepository()
@@ -362,8 +388,8 @@ class SpamAnalysisTest {
         val keyJob = keyRepository.save(Key(1, filter))
         kvalueRepository.save(KValue(1, keyJob, "кайф"))
         val keyMessage = keyRepository.save(Key(2, filter))
-        kvalueRepository.save(KValue(2, keyMessage, "лс"))
-        val text = "У меня есть то, что принесет тебе кайф.Заинтересовал?Пиши в лс."
+        kvalueRepository.save(KValue(2, keyMessage, "Пиши"))
+        val text = "У меня есть то, что принесет тебе кайф.Заинтересовал? Пиши в лс."
         assertThat(SpamAnalysis(filterService, keyService, kvalueService).isSpam(text).spam).isTrue()
     }
 

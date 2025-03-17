@@ -14,7 +14,6 @@ import pro.dionea.service.KValueService
 import pro.dionea.service.KeyService
 import pro.dionea.service.SpamAnalysis
 
-@Disabled
 class SpamAnalysisEnglishTextTest {
 
     @Test

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if test -f "dionea.pid"; then
+    kill -9 $(cat dionea.pid)
+fi
+
 export JAVA_HOME=/root/jdk-21.0.3
 
 export PATH=$JAVA_HOME/bin:$PATH
@@ -9,9 +13,5 @@ git fetch
 git rebase
 
 sh gradlew bootJar
-
-if test -f "dionea.pid"; then
-    kill -9 $(cat dionea.pid)
-fi
 
 nohup java "-Dspring.config.location=file:./dionea.properties" -jar build/libs/dionea-0.0.1.jar &

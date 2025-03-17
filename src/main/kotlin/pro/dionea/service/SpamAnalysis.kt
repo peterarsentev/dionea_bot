@@ -31,6 +31,9 @@ class SpamAnalysis(
         if (emojis.isNotEmpty() && count > 0) {
             return SpamReason(true, "Содержит эмодзи и контактный логин.")
         }
+        if (text.length <= text.count { it == ' ' } * 2.2) {
+            return SpamReason(true, "Символы разделены пробелами.")
+        }
         val lex = EmojiParser.removeAllEmojis(text)
             .replace("[.,+~?!:;(){}\n/]".toRegex(), " ")
             .split("\\s+".toRegex())
@@ -38,6 +41,9 @@ class SpamAnalysis(
             .filter { it.length > 2 }
             .map { it.lowercase() }
             .toSet()
+        if (lex.isEmpty() && text.trim().isNotEmpty()) {
+            return SpamReason(true, "Символы разделены пробелами.")
+        }
         val lang = IdentifyLang(lex).lang()
         if (lang == IdentifyLang.Lang.MIXED) {
             return SpamReason(true, "Русские буквы заменены на английские.")
