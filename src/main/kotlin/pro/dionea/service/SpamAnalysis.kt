@@ -13,6 +13,7 @@ class SpamAnalysis(
 
     companion object {
         val CONTACT_PATTERN = Pattern.compile("@\\w+")
+        val URL_PATTERN = Pattern.compile("https?://[\\w-]+(\\.[\\w-]+)+(/[\\w-]*)*")
         const val MIN_SIZE_OF_MESSAGE = 35
     }
 
@@ -27,6 +28,10 @@ class SpamAnalysis(
         val count = CONTACT_PATTERN.matcher(text).results().count()
         if (count > 1) {
             return SpamReason(true, "Содержит множественные контактные данные.")
+        }
+        val multipleUrls = URL_PATTERN.matcher(text).results().count()
+        if (multipleUrls > 1) {
+            return SpamReason(true, "Содержит множественные ссылки.")
         }
         if (emojis.isNotEmpty() && count > 0) {
             return SpamReason(true, "Содержит эмодзи и контактный логин.")
