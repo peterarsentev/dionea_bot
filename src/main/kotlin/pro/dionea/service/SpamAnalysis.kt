@@ -21,6 +21,9 @@ class SpamAnalysis(
         if (text.length < MIN_SIZE_OF_MESSAGE) {
             return SpamReason(false, "Сообщение короткое.")
         }
+        if (text.containsCurrency()) {
+            return SpamReason(true, "Содержит символы валюты.")
+        }
         val emojis = EmojiParser.extractEmojis(text)
         if (emojis.size >= 3) {
             return SpamReason(true, "Содержит более 3 эмоджи.")
@@ -39,13 +42,7 @@ class SpamAnalysis(
         if (text.length <= text.count { it == ' ' } * 2.2) {
             return SpamReason(true, "Символы разделены пробелами.")
         }
-        val lex = EmojiParser.removeAllEmojis(text)
-            .replace("[.,+~?!:;(){}\n/]".toRegex(), " ")
-            .split("\\s+".toRegex())
-            .asSequence()
-            .filter { it.length > 2 }
-            .map { it.lowercase() }
-            .toSet()
+        val lex = text.tokens()
         if (lex.isEmpty() && text.trim().isNotEmpty()) {
             return SpamReason(true, "Символы разделены пробелами.")
         }
@@ -91,4 +88,24 @@ class SpamAnalysis(
         }
         return result
     }
+}
+
+fun String.tokens(): Set<String>
+        = EmojiParser.removeAllEmojis(this)
+    .replace("[.,+~?!:;(){}\n/]".toRegex(), " ")
+    .split("\\s+".toRegex())
+    .asSequence()
+    .filter { it.length > 2 }
+    .map { it.lowercase() }
+    .toSet()
+
+fun String.containsCurrency(): Boolean {
+    val symbols = setOf('$', '€', '₽')
+    if (this.any { it in symbols }) return true
+    val currencyWords = setOf(
+        "руб", "руб.", "рублей", "рубля", "рубли",
+        "доллар", "доллара", "долларов", "доллары",
+        "евро", "eur", "usd"
+    )
+    return this.tokens().any { it in currencyWords }
 }
