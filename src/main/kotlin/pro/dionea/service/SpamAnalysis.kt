@@ -14,7 +14,7 @@ class SpamAnalysis(
     companion object {
         val CONTACT_PATTERN = Pattern.compile("@\\w+")
         val URL_PATTERN = Pattern.compile("https?://[\\w-]+(\\.[\\w-]+)+(/[\\w-]*)*")
-        const val MIN_SIZE_OF_MESSAGE = 35
+        const val MIN_SIZE_OF_MESSAGE = 30
     }
 
     fun isSpam(text: String): SpamReason {
@@ -76,18 +76,19 @@ class SpamAnalysis(
         }
         return SpamReason(false, "Не спам")
     }
+}
 
-    fun Set<String>.containsAny(baseWords: List<String>) : List<String> {
-        val result = ArrayList<String>()
-        for (messageWord in this) {
-            for (baseWord in baseWords) {
-                if (messageWord.contains(baseWord)) {
-                    result.add(messageWord)
-                }
+fun Set<String>.containsAny(keys: List<String>) : List<String> {
+    val result = ArrayList<String>()
+    for (messageWord in this) {
+        for (key in keys) {
+            if (key[0] == '!' && messageWord.equals(key.substring(1))
+                || messageWord.contains(key)) {
+                result.add(messageWord)
             }
         }
-        return result
     }
+    return result
 }
 
 fun String.tokens(): Set<String>
@@ -95,7 +96,7 @@ fun String.tokens(): Set<String>
     .replace("[.,+~?!:;(){}\n/]".toRegex(), " ")
     .split("\\s+".toRegex())
     .asSequence()
-    .filter { it.length > 2 }
+    .filter { it.length >= 2 }
     .map { it.lowercase() }
     .toSet()
 
@@ -104,7 +105,7 @@ fun String.containsCurrency(): Boolean {
     if (this.any { it in symbols }) return true
     val currencyWords = setOf(
         "руб", "руб.", "рублей", "рубля", "рубли",
-        "доллар", "доллара", "долларов", "доллары",
+        "доллар", "доллара", "долларов", "доллары", "баксы", "баксов",
         "евро", "eur", "usd"
     )
     return this.tokens().any { it in currencyWords }
