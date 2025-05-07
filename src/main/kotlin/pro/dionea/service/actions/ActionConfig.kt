@@ -24,6 +24,7 @@ class ActionConfig(
             VoteCallBackAction(voteService, contactService, spamService, chatService),
             EmptyMessageAction(),
             JoinAction(contactService),
+            VideoAction(contactService),
             ImageAttachedAction(contactService),
             KeyboardMarkUpAction(contactService),
             PrivateChatAction(userService, encoding),

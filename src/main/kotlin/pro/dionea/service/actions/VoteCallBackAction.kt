@@ -76,7 +76,7 @@ class VoteCallBackAction(
         val spammer = contactService.findIfNotCreate(spamMessage.from)
         contactService.increaseCountOfMessages(spammer, true)
         val spam = Spam().apply {
-            text = if (spamMessage.isMessageWithImage()) "Содержит фото" else spamMessage.text
+            text = if (spamMessage.text != null) spamMessage.text else "Сообщение не текстовое"
             time = Timestamp(System.currentTimeMillis())
             contact = spammer
             chat = chatService.findOrCreate(spamMessage)
