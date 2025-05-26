@@ -14,13 +14,9 @@ class SpamAnalysis(
     companion object {
         val CONTACT_PATTERN = Pattern.compile("@\\w+")
         val URL_PATTERN = Pattern.compile("https?://[\\w-]+(\\.[\\w-]+)+(/[\\w-]*)*")
-        const val MIN_SIZE_OF_MESSAGE = 30
     }
 
     fun isSpam(text: String): SpamReason {
-        if (text.length < MIN_SIZE_OF_MESSAGE) {
-            return SpamReason(false, "Сообщение короткое.")
-        }
         if (text.containsCurrency()) {
             return SpamReason(true, "Содержит символы валюты.")
         }
