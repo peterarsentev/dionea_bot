@@ -26,6 +26,15 @@ class SpamAnalysisStrictKeyTest {
     }
 
     @Test
+    fun whenContainerNumbers() {
+        val text = "10 000р за пару часов + в лс";
+        val tokens = text.tokens()
+        val keys = listOf("\\d+.")
+        assertThat(tokens.containsAny(keys))
+            .isEqualTo(listOf("10", "000р"))
+    }
+
+    @Test
     fun whenFullTrue() {
         val text = "Нужнa бригaдa , пoдрoбнee в полсол";
         val tokens = text.tokens()

@@ -34,5 +34,4 @@ class IndexControl(val filterService: FilterService,
         spamResult.result = spamAnalysis.isSpam(text)
         return "redirect:/index"
     }
-
 }

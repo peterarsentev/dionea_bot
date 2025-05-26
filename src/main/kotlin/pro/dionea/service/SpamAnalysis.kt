@@ -82,8 +82,11 @@ fun Set<String>.containsAny(keys: List<String>) : List<String> {
     val result = ArrayList<String>()
     for (messageWord in this) {
         for (key in keys) {
-            if (key[0] == '!' && messageWord.equals(key.substring(1))
-                || messageWord.contains(key)) {
+            if (key[0] == '\\' && messageWord.matches(Regex(key))) {
+                result.add(messageWord)
+            } else if (key[0] == '!' && messageWord.equals(key.substring(1))) {
+                result.add(messageWord)
+            } else if (messageWord.contains(key)) {
                 result.add(messageWord)
             }
         }
